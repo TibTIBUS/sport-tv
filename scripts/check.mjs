@@ -13,8 +13,10 @@ assert(plan(data,{day:0,minutes:25,energy:'good',knee:'ok',run:'yes'}).title.inc
 assert.throws(()=>validate({...data,days:[]}));
 const {validateDemos}=await import('../media.mjs');
 const demos=validateDemos(JSON.parse(readFileSync(new URL('../data/demos.json',import.meta.url),'utf8')),data.exercises);
-assert.deepEqual(Object.keys(demos).sort(),['bridge','hinge','push','row','squat']);
+assert.deepEqual(Object.keys(demos).sort(),Object.keys(data.exercises).filter(id=>id!=='rest').sort());
 assert.throws(()=>validateDemos({squat:{...demos.squat,videoId:'invalid'}},data.exercises));
+assert.throws(()=>validateDemos({march:{...demos.march,provider:'unknown'}},data.exercises));
+assert.throws(()=>validateDemos({warm:{...demos.warm,more:[{...demos.curl,videoId:'bad'}]}},data.exercises));
 const jours=data.days.map(d=>d.day);
 let r=parseSettings('?jour=vendredi&duree=25&forme=bonne&genou=ok&course=non',jours);
 assert.deepEqual(r.values,{day:4,minutes:25,energy:'good',knee:'ok',run:'no'});assert.equal(r.bad.length,0);

@@ -1,14 +1,33 @@
 import {validate,plan} from './planner.mjs';
 import {parseSettings} from './settings.mjs';
-import {DemoPlayer,validateDemos} from './media.mjs';
+import {DemoPlayer,validateDemos,videoUrl,demoVideos} from './media.mjs?v=gestes-complets-2';
 const $=id=>document.getElementById(id);let data,current,steps=[],index=0,remaining=0,deadline=0,running=false,active=false,elapsed=0,last=0,audio,started,completed=false;
-let demos={},watching=false;
+let demos={},watching=false,demoExercise=null,demoSelection=0;
 const inlineDemo=new DemoPlayer($('demo-video'),$('demo-status'));
 const dialogDemo=new DemoPlayer($('dialog-video'),$('dialog-status'));
-function demoText(prefix,d){$(prefix+'-points').replaceChildren(...d.points.map(point=>{const li=document.createElement('li');li.textContent=point;return li;}));$(prefix+'-avoid').textContent=d.avoid;$(prefix+'-note').textContent=d.note;$(prefix+'-source').href=d.source;$(prefix+'-source').textContent=d.publisher;$(prefix+'-original').href='https://www.youtube.com/watch?v='+d.videoId;}
-function updateDemo(s){const d=demos[s.id];const visible=!!d&&['Préparation','Exercice'].includes(s.phase);$('demo-panel').hidden=!visible;if(!visible){inlineDemo.stop();return;}demoText('demo',d);if(s.easier){inlineDemo.stop();$('demo-status').textContent='Variante facile : suis les consignes affichées. La vidéo montre le mouvement de référence.';}else inlineDemo.load(d,running||watching);$('watch').disabled=!!s.easier;}
+function demoText(prefix,d){$(prefix+'-points').replaceChildren(...d.points.map(point=>{const li=document.createElement('li');li.textContent=point;return li;}));$(prefix+'-avoid').textContent=d.avoid;$(prefix+'-note').textContent=d.note;$(prefix+'-source').href=d.source;$(prefix+'-source').textContent=d.publisher;$(prefix+'-original').href=videoUrl(d);}
+function updateDemo(s){
+ const reference=demos[s.id];
+ const visible=!!reference&&s.id!=='rest';
+ $('demo-panel').hidden=!visible;
+ if(!visible){inlineDemo.stop();demoExercise=null;return;}
+ if(demoExercise!==s.id){demoExercise=s.id;demoSelection=0;}
+ const videos=demoVideos(reference),d=videos[demoSelection]||reference;
+ demoText('demo',d);
+ $('demo-choices').replaceChildren(...(s.easier?[]:videos.length>1?videos.map((v,n)=>{
+  const b=document.createElement('button');b.textContent=v.name;b.setAttribute('aria-pressed',String(n===demoSelection));
+  b.onclick=()=>{if(running)$('pause').click();demoSelection=n;watching=true;render();};return b;
+ }):[]));
+ if(s.easier){inlineDemo.stop();$('demo-status').textContent='Variante facile : vidéo de référence retirée. Suis les consignes affichées à gauche.';}else inlineDemo.load(d,running||watching);
+ $('watch').disabled=!!s.easier;
+}
 function openDemo(d){$('dialog-title').textContent=d.name;demoText('dialog',d);$('demo-dialog').showModal();dialogDemo.load(d,true);}
-function renderLibrary(){const ids=[...new Set(current.steps.filter(s=>s.phase==='Exercice').map(s=>s.id))].filter(id=>demos[id]);$('demo-list').replaceChildren(...ids.map(id=>{const b=document.createElement('button');b.textContent='Voir : '+demos[id].name;b.onclick=()=>openDemo(demos[id]);return b;}));document.querySelector('.demo-library').hidden=!ids.length;}
+function renderLibrary(){
+ const ids=[...new Set(current.steps.map(s=>s.id))].filter(id=>demos[id]);
+ const videos=[...new Map(ids.flatMap(id=>demoVideos(demos[id])).map(d=>[videoUrl(d),d])).values()];
+ $('demo-list').replaceChildren(...videos.map(d=>{const b=document.createElement('button');b.textContent='Voir : '+d.name;b.onclick=()=>openDemo(d);return b;}));
+ document.querySelector('.demo-library').hidden=!videos.length;
+}
 $('close-demo').onclick=()=>$('demo-dialog').close();$('demo-dialog').addEventListener('close',()=>dialogDemo.stop());
 $('watch').onclick=()=>{if(running)$('pause').click();watching=true;inlineDemo.playback(true);$('demo-status').textContent='Observe à ton rythme. Clique sur Reprendre quand tu es prêt.';};
 for(const id of ['demo-original','demo-source'])$(id).onclick=()=>{if(running)$('pause').click();};
@@ -16,7 +35,19 @@ const fmt=s=>`${Math.floor(s/60).toString().padStart(2,'0')}:${Math.ceil(s%60).t
 function beep(){try{if(!audio)return;const o=audio.createOscillator(),g=audio.createGain();o.connect(g);g.connect(audio.destination);g.gain.value=.08;o.frequency.value=660;o.start();o.stop(audio.currentTime+.15);}catch{}}
 function show(id){for(const s of ['setup','player','finish'])$(s).hidden=s!==id;}
 function refresh(){try{current=plan(data,{day:Number($('day').value),minutes:Number($('duration').value),energy:$('energy').value,knee:$('knee').value,run:$('run').value});$('title').textContent=current.title;$('summary').textContent=current.steps.length?`${$('duration').value} minutes · Échauffement et pauses inclus · Deux haltères de 5 kg si adaptés`:'Jour de repos';$('notice').textContent=current.notice;$('start').disabled=!current.steps.length;$('preview').replaceChildren(...[...new Set(current.steps.filter(s=>s.phase==='Exercice').map(s=>s.name))].map(name=>{const li=document.createElement('li');li.textContent=name;return li;}));renderLibrary();}catch(e){$('error').textContent=e.message;$('start').disabled=true;}}
-function render(){const s=steps[index];$('phase').textContent=`${s.phase} · Étape ${index+1} / ${steps.length}`;$('exercise').textContent=s.name;$('cue').textContent=s.cue;$('target').textContent=s.target||'À ton rythme';$('clock').textContent=fmt(Math.ceil(remaining));$('next').textContent=steps[index+1]?`Ensuite : ${steps[index+1].name} · ${steps[index+1].phase}`:'Dernière étape';$('progress').value=100*(index/steps.length);$('pause').textContent=running?'Pause':'Reprendre';updateDemo(s);}
+const phaseTitles={Préparation:'Prépare-toi',Exercice:'À toi de jouer',Récupération:'Repos',Échauffement:'Échauffe-toi', 'Retour au calme':'Ralentis doucement'};
+function render(){
+ const s=steps[index],next=steps[index+1],preparing=s.phase==='Préparation';
+ $('phase').textContent=`${s.phase} · Étape ${index+1} / ${steps.length}`;
+ $('stage').dataset.phase=s.phase;
+ $('stage-title').textContent=phaseTitles[s.phase]||s.phase;
+ $('stage-help').textContent=preparing?'Ne commence pas encore les répétitions. Regarde le geste et place-toi ; le départ arrive à la fin du compte à rebours.':s.phase==='Exercice'?'Fais le mouvement maintenant, à ton rythme. Termine les répétitions indiquées, puis repose-toi si du temps reste.':s.phase==='Récupération'?'Relâche les muscles. Cette pause fait partie de la séance.':s.phase==='Échauffement'?'Commence à bouger doucement. Augmente le rythme progressivement.':'Marche lentement et laisse ta respiration ralentir.';
+ $('exercise').textContent=s.name;$('cue').textContent=s.cue;
+ $('target').textContent=preparing?`À suivre : ${next?.seconds||0} secondes de mouvement · ${next?.target||'À ton rythme'}`:s.target||'À ton rythme';
+ $('clock').setAttribute('aria-label',preparing?'Temps avant le départ':'Temps restant');$('clock').textContent=fmt(Math.ceil(remaining));
+ $('next').textContent=next?`Ensuite : ${phaseTitles[next.phase]||next.phase} · ${next.name} · ${next.seconds} s`:'Dernière étape';
+ $('progress').value=100*(index/steps.length);$('pause').textContent=running?'Pause':'Reprendre';updateDemo(s);
+}
 function finish(done){inlineDemo.stop();watching=false;running=false;active=false;completed=done;$('result').textContent=done?'Séance terminée.':'Séance arrêtée.';show('finish');}
 function advance(){watching=false;if(++index>=steps.length){finish(true);return;}remaining=steps[index].seconds;deadline=performance.now()+remaining*1000;last=performance.now();render();beep();}
 $('start').onclick=()=>{steps=current.steps.map(s=>({...s}));watching=false;index=0;remaining=steps[0].seconds;elapsed=0;started=new Date().toISOString();active=true;running=true;last=performance.now();deadline=last+remaining*1000;try{audio??=new AudioContext();audio.resume();}catch{}show('player');render();};
