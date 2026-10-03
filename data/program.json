@@ -33,7 +33,7 @@
     },
     "row": {
       "name": "Tirage avec haltère",
-      "cue": "Buste incliné, dos stable. Tire un haltère vers la hanche, puis redescends lentement. Change de côté à mi-temps.",
+      "cue": "Prends appui avec la main libre sur un support fixe et stable. Buste incliné, dos neutre, tire le coude vers la hanche puis redescends lentement. Change de côté à mi-temps.",
       "easy": "Sans charge, ramène le coude vers la hanche.",
       "target": "4 à 6 répétitions par côté"
     },

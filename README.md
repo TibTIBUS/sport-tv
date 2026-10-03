@@ -46,3 +46,22 @@ Lire AGENTS.md et HERMES.md. Hermès modifie `data/program.json` pour préparer 
 - Planification matinale sur l'ordinateur d'Hermès et publication selon l'hébergement choisi.
 
 Ces fonctions ne sont pas présentes dans cette première version. Un dépôt privé ne rend pas automatiquement un site publié privé. Ne pas publier les bilans ni des renseignements médicaux.
+
+## Démonstrations des gestes
+
+Cinq mouvements disposent d'une vidéo : squat, pompes au mur, tirage avec haltère, hanches en arrière, pont de hanches. Avant la séance, les boutons « Voir » ouvrent un aperçu. Pendant la préparation et l'exercice, une vidéo muette accompagne le minuteur et deux consignes en français. « Observer le geste — pause » suspend le minuteur et laisse la vidéo jouer ; « Reprendre » relance la séance. Les durées de base restent inchangées ; le temps d'observation s'ajoute seulement si l'utilisateur le demande.
+
+La vidéo est intégrée avec le lecteur officiel YouTube, sans téléchargement, extraction de séquence ou copie dans le dépôt. Les tutoriels complets sont conservés et certains sont en anglais. Ils ne sont pas tous de courtes boucles de répétitions : la boucle porte sur la vidéo originale entière. Les commandes restent accessibles et la vidéo est muette par défaut. Des annonces, restrictions ou blocages YouTube restent possibles. Les liens de source et les consignes restent disponibles si la vidéo ne charge pas. Une disponibilité réelle dans le Chrome d'Hermès et en Cast doit être vérifiée.
+
+La variante facile affiche ses consignes et retire la vidéo de référence pour ne pas montrer un geste différent. Les autres mouvements gardent leurs consignes textuelles. La démonstration ne corrige pas la posture de l'utilisateur.
+
+Le tirage est maintenant explicité avec appui sur un support fixe et stable, pour correspondre au tutoriel. Les autres exercices, l'ordre, les durées, les réglages par adresse et les identifiants des commandes d'Hermès sont conservés.
+
+### Sources des vidéos
+
+- Squat et pont à deux jambes : [Kingston and Richmond NHS, physiothérapie](https://www.kingstonandrichmond.nhs.uk/services/service-search-z/physiotherapy-msk-richmond), vidéos liées directement par le service.
+- Pompes au mur : [South Tees Hospitals NHS](https://www.southtees.nhs.uk/resources/combined-press-ups/), vidéo liée par le service.
+- Tirage avec haltère : [Michelle Kenway, physiothérapeute](https://www.pelvicexercises.com.au/dumbbell-row/), lecteur et lien de la publication de l'auteure.
+- Hanches en arrière : [Hinge Health](https://www.hingehealth.com/fr/fr/resources/articles/hip-hinge/), vidéo du compte Hinge Health et guide relu par un physiothérapeute.
+
+Sélection des sources : 3 octobre 2026. Le catalogue est data/demos.json ; ne pas y ajouter des vidéos dont la variante ne correspond pas à l'exercice. Ne pas remplacer les vidéos par des gestes générés par IA. Les auteurs conservent leurs droits : aucune autorisation de réhéberger ces fichiers n'est supposée.

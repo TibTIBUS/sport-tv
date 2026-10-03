@@ -11,6 +11,10 @@ for(let day=0;day<6;day++)for(const minutes of [20,25,30])for(const energy of ['
 assert.equal(plan(data,{day:6,minutes:25,energy:'good',knee:'ok',run:'no'}).steps.length,0);
 assert(plan(data,{day:0,minutes:25,energy:'good',knee:'ok',run:'yes'}).title.includes('Après la course'));
 assert.throws(()=>validate({...data,days:[]}));
+const {validateDemos}=await import('../media.mjs');
+const demos=validateDemos(JSON.parse(readFileSync(new URL('../data/demos.json',import.meta.url),'utf8')),data.exercises);
+assert.deepEqual(Object.keys(demos).sort(),['bridge','hinge','push','row','squat']);
+assert.throws(()=>validateDemos({squat:{...demos.squat,videoId:'invalid'}},data.exercises));
 const jours=data.days.map(d=>d.day);
 let r=parseSettings('?jour=vendredi&duree=25&forme=bonne&genou=ok&course=non',jours);
 assert.deepEqual(r.values,{day:4,minutes:25,energy:'good',knee:'ok',run:'no'});assert.equal(r.bad.length,0);
