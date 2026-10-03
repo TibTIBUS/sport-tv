@@ -10,13 +10,33 @@ Choisir un jour, 20/25/30 minutes, la forme, l'état du genou et une éventuelle
 
 Commandes : pause/reprendre, passer, variante facile, arrêter, plein écran. Les sons sont activés au clic de démarrage si le navigateur le permet. Après une interruption de plus de 5 secondes, la lecture se met en pause plutôt que de sauter des exercices.
 
+## Réglages par l'adresse
+
+Le lecteur peut s'ouvrir déjà réglé, avec des paramètres dans l'adresse :
+
+`https://tibtibus.github.io/sport-tv/?jour=vendredi&duree=25&forme=bonne&genou=ok&course=non`
+
+| Paramètre | Valeurs acceptées |
+|---|---|
+| `jour` | lundi, mardi, mercredi, jeudi, vendredi, samedi, dimanche (majuscules et accents ignorés) |
+| `duree` | 20, 25 ou 30 |
+| `forme` | bonne, moyenne, fatigue |
+| `genou` | ok, gene, douleur |
+| `course` | oui, non |
+
+- Un paramètre absent garde la valeur par défaut (le jour courant pour `jour`). Les réglages d'une séance précédente ne sont pas repris : ils viennent de l'adresse ou des valeurs par défaut.
+- Les règles de sécurité sont inchangées : genou « douleur » bloque le démarrage, gêne ou fatigue donnent la séance douce, une course récente donne la séance haut du corps.
+- Une valeur non reconnue affiche une erreur et bloque le démarrage jusqu'à correction.
+- La ligne « Réglages reçus par l'adresse » affiche à l'écran les réglages réellement appliqués, pour les vérifier.
+- Le clic sur « Commencer » reste nécessaire : le navigateur n'autorise le son qu'après un geste.
+
 ## Travail avec Hermès
 
 Lire AGENTS.md et HERMES.md. Hermès modifie `data/program.json` pour préparer les séances ; le lecteur charge ce fichier à son ouverture. Les bilans se téléchargent en JSON et doivent être transmis à Hermès. Le lecteur ne synchronise pas automatiquement les bilans et n'exécute pas de tâche planifiée.
 
 ## Vérifier
 
-`node scripts/check.mjs` : validité du programme, durée exacte, adaptations et gestion du repos/douleur.
+`node scripts/check.mjs` : validité du programme, durée exacte, adaptations, gestion du repos/douleur et lecture des réglages par l'adresse.
 
 ## Suite prévue
 
