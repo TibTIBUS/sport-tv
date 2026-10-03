@@ -7,6 +7,9 @@ const inlineDemo=new DemoPlayer($('demo-video'),$('demo-status'));
 const dialogDemo=new DemoPlayer($('dialog-video'),$('dialog-status'));
 function demoText(prefix,d){$(prefix+'-points').replaceChildren(...d.points.map(point=>{const li=document.createElement('li');li.textContent=point;return li;}));$(prefix+'-avoid').textContent=d.avoid;$(prefix+'-note').textContent=d.note;$(prefix+'-source').href=d.source;$(prefix+'-source').textContent=d.publisher;$(prefix+'-original').href=videoUrl(d);}
 function updateDemo(s){
+ const resting=s.id==='rest';
+ $('rest-panel').hidden=!resting;
+ $('rest-panel').classList.toggle('is-paused',!running);
  const reference=demos[s.id];
  const visible=!!reference&&s.id!=='rest';
  $('demo-panel').hidden=!visible;
@@ -65,7 +68,7 @@ function render(){
  $('next').textContent=next?`Ensuite : ${phaseTitles[next.phase]||next.phase} · ${next.name} · ${next.seconds} s`:'Dernière étape';
  $('progress').value=100*(index/steps.length);$('pause').textContent=running?'Pause':'Reprendre';updateDemo(s);motivate();
 }
-function finish(done){inlineDemo.stop();watching=false;running=false;active=false;completed=done;$('result').textContent=done?'Séance terminée.':'Séance arrêtée.';show('finish');}
+function finish(done){$('rest-panel').classList.add('is-paused');inlineDemo.stop();watching=false;running=false;active=false;completed=done;$('result').textContent=done?'Séance terminée.':'Séance arrêtée.';show('finish');}
 function advance(){watching=false;if(++index>=steps.length){finish(true);return;}remaining=steps[index].seconds;deadline=performance.now()+remaining*1000;last=performance.now();render();beep();}
 $('start').onclick=()=>{steps=current.steps.map(s=>({...s}));watching=false;index=0;remaining=steps[0].seconds;elapsed=0;started=new Date().toISOString();active=true;running=true;last=performance.now();deadline=last+remaining*1000;try{audio??=new AudioContext();audio.resume();}catch{}show('player');render();};
 $('pause').onclick=()=>{if(!active)return;watching=false;if(running){remaining=Math.max(0,(deadline-performance.now())/1000);running=false;}else{running=true;last=performance.now();deadline=last+remaining*1000;}render();};

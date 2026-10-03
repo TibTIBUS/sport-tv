@@ -22,3 +22,18 @@ dialog{max-width:950px;width:calc(100% - 2rem);max-height:90vh;overflow:auto;bac
 .stage{border:1px solid #637c50;border-left:5px solid #cafa68;border-radius:.6rem;background:#1b2a21;padding:1rem 1.3rem;margin:0 0 2rem}.stage strong{font-size:clamp(1.5rem,2.4vw,2.2rem);color:#cafa68}.stage p{margin:.35rem 0 0;max-width:75ch}.stage[data-phase="Préparation"]{border-color:#ffce8e;background:#2b261b}.stage[data-phase="Préparation"] strong{color:#ffce8e}.demo-choices{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.7rem}.demo-choices button{font-size:.9rem;padding:.5rem .8rem}.demo-choices button[aria-pressed="true"]{border-color:#cafa68;color:#cafa68}
 
 .motivation{color:#cafa68;font-size:clamp(1.15rem,1.9vw,1.6rem);font-weight:650;line-height:1.4;border-left:4px solid #cafa68;padding:.4rem 0 .4rem 1rem;margin:1rem 0;max-width:38ch}
+
+/* Quiet, decorative recovery animation; no prescribed breathing cadence. */
+.rest-panel{min-height:360px;border:1px solid #48634c;border-radius:1rem;background:radial-gradient(ellipse at 50% 30%,#263e2a 0,#17251e 65%);padding:1.6rem;text-align:center;overflow:hidden}
+.rest-panel h2{font-size:clamp(1.8rem,2.7vw,2.6rem);line-height:1.15;margin:.6rem 0 1rem;color:#d9f2a8}
+.rest-panel .eyebrow{font-size:.85rem;margin:1rem 0 .5rem}
+.rest-panel .muted{font-size:.95rem;max-width:36ch;margin:1rem auto 0}
+.rest-orb{position:relative;width:clamp(140px,16vw,210px);aspect-ratio:1;margin:1rem auto 1.7rem;display:grid;place-items:center}
+.rest-orb::before,.rest-orb::after{content:'';position:absolute;inset:0;border:1px solid #cafa6850;border-radius:50%;animation:rest-drift 7s ease-in-out infinite}
+.rest-orb::after{inset:13%;border-color:#cafa6870;animation-delay:-3.5s}
+.rest-orb-core{width:54%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 35% 30%,#e4fab5,#a1d85c 55%,#587d3e);box-shadow:0 0 45px #cafa6825;animation:rest-glow 7s ease-in-out infinite}
+@keyframes rest-drift{0%,100%{transform:scale(.94);opacity:.45}50%{transform:scale(1.06);opacity:.9}}
+@keyframes rest-glow{0%,100%{transform:scale(.95);box-shadow:0 0 25px #cafa6815}50%{transform:scale(1.06);box-shadow:0 0 55px #cafa6830}}
+.rest-panel.is-paused .rest-orb::before,.rest-panel.is-paused .rest-orb::after,.rest-panel.is-paused .rest-orb-core{animation-play-state:paused}
+@media(prefers-reduced-motion:reduce){.rest-orb::before,.rest-orb::after,.rest-orb-core{animation:none}}
+@media(max-width:900px){.rest-panel{min-height:0;padding:1.3rem}.rest-orb{width:135px;margin:.5rem auto 1rem}}
