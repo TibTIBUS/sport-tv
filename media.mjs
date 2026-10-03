@@ -1,34 +1,56 @@
-let api;
-function youtube(){
- if(globalThis.YT?.Player)return Promise.resolve(globalThis.YT);
- if(api)return api;
- api=new Promise((resolve,reject)=>{
+const apis={};
+function sdk(provider){
+ const ready=()=>provider==='vimeo'?globalThis.Vimeo:globalThis.YT;
+ if(ready()?.Player)return Promise.resolve(ready());
+ if(apis[provider])return apis[provider];
+ apis[provider]=new Promise((resolve,reject)=>{
   const timeout=setTimeout(()=>reject(Error('Le lecteur vidéo ne répond pas.')),15000);
-  const previous=globalThis.onYouTubeIframeAPIReady;
-  globalThis.onYouTubeIframeAPIReady=()=>{clearTimeout(timeout);previous?.();resolve(globalThis.YT);};
-  const script=document.createElement('script');script.src='https://www.youtube.com/iframe_api';script.onerror=()=>{clearTimeout(timeout);reject(Error('Impossible de charger YouTube.'));};document.head.append(script);
- });return api;
+  const done=()=>{clearTimeout(timeout);resolve(ready());};
+  const script=document.createElement('script');
+  if(provider==='youtube'){
+   const previous=globalThis.onYouTubeIframeAPIReady;
+   globalThis.onYouTubeIframeAPIReady=()=>{previous?.();done();};script.src='https://www.youtube.com/iframe_api';
+  }else{script.src='https://player.vimeo.com/api/player.js';script.onload=done;}
+  script.onerror=()=>{clearTimeout(timeout);reject(Error('Impossible de charger le lecteur vidéo.'));};document.head.append(script);
+ }).catch(e=>{delete apis[provider];throw e;});return apis[provider];
 }
+export const demoVideos=d=>[d,...(d.more||[])];
+export const videoUrl=d=>d.provider==='vimeo'?`https://vimeo.com/${d.videoId}`:`https://www.youtube.com/watch?v=${d.videoId}`;
 export function validateDemos(demos,exercises){
- for(const [id,d] of Object.entries(demos)){
-  if(!exercises[id]||!/^[-\w]{11}$/.test(d.videoId)||!d.publisher||!d.name||!Array.isArray(d.points)||d.points.length!==2||d.points.some(p=>typeof p!=='string'||!p)||!d.avoid||!d.note)throw Error('Démonstration invalide : '+id);
-  if(new URL(d.source).protocol!=='https:')throw Error('Source non sécurisée.');
+ for(const [id,reference] of Object.entries(demos)){
+  if(!exercises[id]||(reference.more&&!Array.isArray(reference.more)))throw Error('Démonstration invalide : '+id);
+  for(const d of demoVideos(reference)){
+   const provider=d.provider||'youtube';
+   if(!['youtube','vimeo'].includes(provider)||!(provider==='vimeo'?/^\d+$/:/^[-\w]{11}$/).test(d.videoId)||!d.publisher||!d.name||!Array.isArray(d.points)||d.points.length!==2||d.points.some(p=>typeof p!=='string'||!p)||!d.avoid||!d.note||(d!==reference&&d.more))throw Error('Démonstration invalide : '+id);
+   if(new URL(d.source).protocol!=='https:')throw Error('Source non sécurisée.');
+  }
  }return demos;
 }
 export class DemoPlayer{
  constructor(container,status){this.container=container;this.status=status;this.token=0;this.playing=false;}
- stop(){this.token++;this.player?.destroy();this.player=null;this.container.replaceChildren();this.key=null;this.playing=false;}
- playback(playing){this.playing=playing;if(this.player?.getPlayerState){try{if(playing){this.player.mute();this.player.playVideo();}else this.player.pauseVideo();}catch{}}}
+ stop(){this.token++;try{const result=this.player?.destroy();result?.catch?.(()=>{});}catch{}this.player=null;this.container.replaceChildren();this.key=null;this.playing=false;}
+ playback(playing){
+  this.playing=playing;const player=this.player,token=this.token;if(!player)return;
+  try{if(this.provider==='vimeo'){
+   const action=playing?player.play():player.pause();action.catch(()=>{if(token===this.token&&playing)this.status.textContent='Clique sur Lecture dans la vidéo pour démarrer la démonstration.';});
+  }else if(player.getPlayerState){if(playing){player.mute();player.playVideo();}else player.pauseVideo();}}catch{}
+ }
  async load(d,playing=true){
-  if(this.key===d.videoId){this.playback(playing);return;}
-  this.stop();const token=this.token;this.key=d.videoId;this.playing=playing;this.status.textContent='Chargement de la démonstration…';
+  const key=videoUrl(d);if(this.key===key){this.playback(playing);return;}
+  this.stop();const token=this.token;this.key=key;this.playing=playing;this.provider=d.provider||'youtube';this.status.textContent='Chargement de la démonstration…';
+  const unavailable=()=>{if(token===this.token)this.status.textContent='Vidéo indisponible ici. Utilise le lien vers la vidéo originale ou les consignes.';};
   try{
-   const YT=await youtube();if(token!==this.token)return;
+   const API=await sdk(this.provider);if(token!==this.token)return;
    const mount=document.createElement('div');this.container.append(mount);
-   this.player=new YT.Player(mount,{host:'https://www.youtube-nocookie.com',videoId:d.videoId,width:'100%',height:'100%',playerVars:{playsinline:1,controls:1,rel:0,enablejsapi:1,origin:location.origin},events:{
+   if(this.provider==='vimeo'){
+    const player=new API.Player(mount,{id:Number(d.videoId),width:640,loop:true,muted:true,playsinline:true,dnt:true});this.player=player;player.on('error',unavailable);
+    await player.ready();if(token!==this.token)return;
+    const iframe=this.container.querySelector('iframe');if(iframe)iframe.title='Démonstration : '+d.name;
+    await player.setVolume(0);if(token!==this.token)return;
+    this.status.textContent='Vidéo muette · consignes en français ci-dessous';this.playback(this.playing);
+   }else this.player=new API.Player(mount,{host:'https://www.youtube-nocookie.com',videoId:d.videoId,width:'100%',height:'100%',playerVars:{playsinline:1,controls:1,rel:0,enablejsapi:1,origin:location.origin},events:{
     onReady:e=>{if(token!==this.token)return;e.target.getIframe().title='Démonstration : '+d.name;e.target.mute();this.status.textContent='Vidéo muette · consignes en français ci-dessous';this.playback(this.playing);},
-    onStateChange:e=>{if(token!==this.token)return;if(e.data===0&&this.playing){e.target.seekTo(0);e.target.playVideo();}},
-    onError:()=>{if(token!==this.token)return;this.status.textContent='Vidéo indisponible ici. Utilise le lien vers la vidéo originale ou les consignes.';}
+    onStateChange:e=>{if(token!==this.token)return;if(e.data===0&&this.playing){e.target.seekTo(0);e.target.playVideo();}},onError:unavailable
    }});
   }catch(e){if(token===this.token)this.status.textContent=e.message+' Les consignes restent disponibles.';}
  }

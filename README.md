@@ -40,7 +40,6 @@ Lire AGENTS.md et HERMES.md. Hermès modifie `data/program.json` pour préparer 
 
 ## Suite prévue
 
-- Illustrations et démonstrations dont la technique et les droits d'utilisation sont vérifiés.
 - Commande synchronisée depuis le téléphone (nécessite un service partagé).
 - Lancement sur la TCL après identification du modèle.
 - Planification matinale sur l'ordinateur d'Hermès et publication selon l'hébergement choisi.
@@ -49,11 +48,15 @@ Ces fonctions ne sont pas présentes dans cette première version. Un dépôt pr
 
 ## Démonstrations des gestes
 
-Cinq mouvements disposent d'une vidéo : squat, pompes au mur, tirage avec haltère, hanches en arrière, pont de hanches. Avant la séance, les boutons « Voir » ouvrent un aperçu. Pendant la préparation et l'exercice, une vidéo muette accompagne le minuteur et deux consignes en français. « Observer le geste — pause » suspend le minuteur et laisse la vidéo jouer ; « Reprendre » relance la séance. Les durées de base restent inchangées ; le temps d'observation s'ajoute seulement si l'utilisateur le demande.
+Les onze mouvements du programme disposent d'une vidéo de référence. L'échauffement et le retour au calme proposent aussi des vidéos pour leurs gestes (marche, épaules, hanches ou chevilles). Les boutons permettent de choisir le geste à observer ; ces clips ne constituent pas une routine complète de quatre ou trois minutes. La récupération n'a pas de vidéo.
 
-La vidéo est intégrée avec le lecteur officiel YouTube, sans téléchargement, extraction de séquence ou copie dans le dépôt. Les tutoriels complets sont conservés et certains sont en anglais. Ils ne sont pas tous de courtes boucles de répétitions : la boucle porte sur la vidéo originale entière. Les commandes restent accessibles et la vidéo est muette par défaut. Des annonces, restrictions ou blocages YouTube restent possibles. Les liens de source et les consignes restent disponibles si la vidéo ne charge pas. Une disponibilité réelle dans le Chrome d'Hermès et en Cast doit être vérifiée.
+Avant la séance, les boutons « Voir » ouvrent un aperçu. Pendant la séance, une vidéo muette accompagne les consignes en français. La préparation affiche « Prépare-toi — ne commence pas encore les répétitions » et le temps avant le départ ; l'effort affiche « À toi de jouer ». Les dix secondes de préparation et les quarante secondes de mouvement sont deux phases du même exercice. Les durées sont conservées.
 
-La variante facile affiche ses consignes et retire la vidéo de référence pour ne pas montrer un geste différent. Les autres mouvements gardent leurs consignes textuelles. La démonstration ne corrige pas la posture de l'utilisateur.
+« Observer le geste — pause » et le choix d'un autre geste suspendent le minuteur et laissent la vidéo jouer. « Reprendre » relance la séance. Le temps d'observation s'ajoute seulement si l'utilisateur le demande.
+
+Les vidéos sont intégrées avec les lecteurs officiels YouTube et Vimeo, sans téléchargement ni copie dans le dépôt. Certains tutoriels sont en anglais et la boucle porte sur la vidéo originale entière. Des restrictions, annonces ou blocages de lecture restent possibles. Les liens et les consignes restent disponibles si une vidéo ne charge pas. Vérifier la lecture réelle dans le Chrome d'Hermès et en Cast.
+
+La variante facile affiche ses consignes et retire la vidéo de référence pour ne pas montrer un geste différent. Les vidéos couvrent les mouvements de référence, pas toutes les adaptations. Une démonstration ne corrige pas la posture de l'utilisateur.
 
 Le tirage est maintenant explicité avec appui sur un support fixe et stable, pour correspondre au tutoriel. Les autres exercices, l'ordre, les durées, les réglages par adresse et les identifiants des commandes d'Hermès sont conservés.
 
@@ -63,5 +66,13 @@ Le tirage est maintenant explicité avec appui sur un support fixe et stable, po
 - Pompes au mur : [South Tees Hospitals NHS](https://www.southtees.nhs.uk/resources/combined-press-ups/), vidéo liée par le service.
 - Tirage avec haltère : [Michelle Kenway, physiothérapeute](https://www.pelvicexercises.com.au/dumbbell-row/), lecteur et lien de la publication de l'auteure.
 - Hanches en arrière : [Hinge Health](https://www.hingehealth.com/fr/fr/resources/articles/hip-hinge/), vidéo du compte Hinge Health et guide relu par un physiothérapeute.
+
+- Glissement du pied à quatre pattes : [Body Works Sports Physiotherapy](https://body-works.ca/physio-video/core-strength-four-point-kneeling-with-heel-slides/).
+- Flexion des coudes avec haltères : [Hawkes Physiotherapy](https://hawkesphysiotherapy.co.uk/exercise/dumbbell-bicep-curls-in-supination/).
+- Marche sur place : [Lancashire Teaching Hospitals NHS](https://www.lancsteachinghospitals.nhs.uk/trauma-exercises), « HIP Marching on spot ».
+- Pas latéraux : [Peak Physio](https://www.peak-physio.com.au/exercise/side-stepping/), sans obstacle ni élastique.
+- Cercles d'épaules : [National University Health System, Singapour](https://www.youtube.com/watch?v=Bv8QPOs7xks).
+- Rapprochement des omoplates : [Restore Plus Physical Therapy](https://www.youtube.com/watch?v=_TI_RXSAyfU).
+- Pointes et talons assis : [Arthritis Foundation — Walk With Ease](https://www.youtube.com/watch?v=JegXz_XPgwk).
 
 Sélection des sources : 3 octobre 2026. Le catalogue est data/demos.json ; ne pas y ajouter des vidéos dont la variante ne correspond pas à l'exercice. Ne pas remplacer les vidéos par des gestes générés par IA. Les auteurs conservent leurs droits : aucune autorisation de réhéberger ces fichiers n'est supposée.
