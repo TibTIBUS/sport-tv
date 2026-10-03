@@ -36,6 +36,23 @@ function beep(){try{if(!audio)return;const o=audio.createOscillator(),g=audio.cr
 function show(id){for(const s of ['setup','player','finish'])$(s).hidden=s!==id;}
 function refresh(){try{current=plan(data,{day:Number($('day').value),minutes:Number($('duration').value),energy:$('energy').value,knee:$('knee').value,run:$('run').value});$('title').textContent=current.title;$('summary').textContent=current.steps.length?`${$('duration').value} minutes · Échauffement et pauses inclus · Deux haltères de 5 kg si adaptés`:'Jour de repos';$('notice').textContent=current.notice;$('start').disabled=!current.steps.length;$('preview').replaceChildren(...[...new Set(current.steps.filter(s=>s.phase==='Exercice').map(s=>s.name))].map(name=>{const li=document.createElement('li');li.textContent=name;return li;}));renderLibrary();}catch(e){$('error').textContent=e.message;$('start').disabled=true;}}
 const phaseTitles={Préparation:'Prépare-toi',Exercice:'À toi de jouer',Récupération:'Repos',Échauffement:'Échauffe-toi', 'Retour au calme':'Ralentis doucement'};
+const encouragements=[
+ 'Allez Thibaut, une répétition après l’autre !',
+ 'Thibaut, avance à ton rythme : chaque effort compte.',
+ 'Garde le contrôle, Thibaut. La qualité du geste passe avant la vitesse.',
+ 'Tu prends du temps pour toi, Thibaut. Continue tranquillement.',
+ 'Respire, Thibaut, et garde un mouvement fluide.',
+ 'Thibaut, la régularité se construit séance après séance.'
+];
+function motivate(){
+ const s=steps[index],message=$('motivation');
+ message.hidden=s.phase!=='Exercice';
+ if(message.hidden){message.textContent='';return;}
+ if(!running){message.textContent='Prends ton temps, Thibaut. Reprends quand tu es prêt.';return;}
+ const exerciseNumber=steps.slice(0,index).filter(step=>step.phase==='Exercice').length;
+ const moment=Math.floor(Math.max(0,s.seconds-remaining)/10);
+ message.textContent=s.easier?'Thibaut, adapte le geste à ton énergie. Bouger avec contrôle, c’est déjà avancer.':encouragements[(exerciseNumber+moment)%encouragements.length];
+}
 function render(){
  const s=steps[index],next=steps[index+1],preparing=s.phase==='Préparation';
  $('phase').textContent=`${s.phase} · Étape ${index+1} / ${steps.length}`;
@@ -46,7 +63,7 @@ function render(){
  $('target').textContent=preparing?`À suivre : ${next?.seconds||0} secondes de mouvement · ${next?.target||'À ton rythme'}`:s.target||'À ton rythme';
  $('clock').setAttribute('aria-label',preparing?'Temps avant le départ':'Temps restant');$('clock').textContent=fmt(Math.ceil(remaining));
  $('next').textContent=next?`Ensuite : ${phaseTitles[next.phase]||next.phase} · ${next.name} · ${next.seconds} s`:'Dernière étape';
- $('progress').value=100*(index/steps.length);$('pause').textContent=running?'Pause':'Reprendre';updateDemo(s);
+ $('progress').value=100*(index/steps.length);$('pause').textContent=running?'Pause':'Reprendre';updateDemo(s);motivate();
 }
 function finish(done){inlineDemo.stop();watching=false;running=false;active=false;completed=done;$('result').textContent=done?'Séance terminée.':'Séance arrêtée.';show('finish');}
 function advance(){watching=false;if(++index>=steps.length){finish(true);return;}remaining=steps[index].seconds;deadline=performance.now()+remaining*1000;last=performance.now();render();beep();}
@@ -54,7 +71,7 @@ $('start').onclick=()=>{steps=current.steps.map(s=>({...s}));watching=false;inde
 $('pause').onclick=()=>{if(!active)return;watching=false;if(running){remaining=Math.max(0,(deadline-performance.now())/1000);running=false;}else{running=true;last=performance.now();deadline=last+remaining*1000;}render();};
 $('skip').onclick=()=>{if(active)advance();};$('stop').onclick=()=>{if(active)finish(false);};
 $('easy').onclick=()=>{for(let n=index;n<steps.length;n++)if(steps[n].phase==='Exercice'||steps[n].phase==='Préparation'){steps[n].easier=true;steps[n].cue=steps[n].easy;steps[n].target='Variante facile · À ton rythme';}render();};
-setInterval(()=>{if(!active||!running)return;const now=performance.now(),gap=now-last;if(gap>5000){remaining=Math.max(0,(deadline-last)/1000);running=false;render();$('next').textContent='Séance mise en pause après une interruption. Reprends quand tu es prêt.';return;}elapsed+=gap/1000;last=now;remaining=Math.max(0,(deadline-now)/1000);if(remaining<=0)advance();else $('clock').textContent=fmt(Math.ceil(remaining));},100);
+setInterval(()=>{if(!active||!running)return;const now=performance.now(),gap=now-last;if(gap>5000){remaining=Math.max(0,(deadline-last)/1000);running=false;render();$('next').textContent='Séance mise en pause après une interruption. Reprends quand tu es prêt.';return;}elapsed+=gap/1000;last=now;remaining=Math.max(0,(deadline-now)/1000);if(remaining<=0)advance();else {$('clock').textContent=fmt(Math.ceil(remaining));motivate();}},100);
 $('back').onclick=()=>{show('setup');refresh();};
 $('download').onclick=()=>{const report={version:1,started,session:current.title,completed,activeSeconds:Math.round(elapsed),difficulty:$('difficulty').value,kneeDuring:$('feedback-knee').value,kneeNextMorning:null};const blob=new Blob([JSON.stringify(report,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=`bilan-${started.slice(0,10)}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
 $('fullscreen').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen();}catch{$('error').textContent='Le plein écran n’est pas disponible dans ce navigateur.';}};
