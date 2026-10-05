@@ -92,3 +92,7 @@ Le lecteur YouTube utilise désormais `www.youtube.com` pour permettre la reconn
 Le thème 1 sombre est affiché par défaut : vidéo à gauche, chronomètre et consignes à droite. Le thème 2 clair utilise trois colonnes sur les grands écrans : chronomètre, vidéo, consignes. Le bouton soleil/lune en haut permet de passer de l'un à l'autre, y compris pendant la séance, sans relancer le lecteur ni le chronomètre. Le choix est conservé dans le stockage local de ce profil Chrome ; si ce stockage est indisponible, le bouton continue de fonctionner pour la page ouverte.
 
 Sur écran tactile, un glissement horizontal sur le texte ou une zone libre du contenu change de thème (gauche vers clair, droite vers sombre). Les gestes sur les vidéos, liens, sélecteurs et boutons sont laissés à ces contrôles. Le thème du téléphone et celui du Chrome d'Hermès restent indépendants. Les écrans étroits conservent un défilement vertical pour garder les consignes lisibles. Les écrans paysage utilisent une présentation ajustée à leur hauteur, avec une répartition adaptée sur les écrans moins hauts.
+
+## Accueil compact
+
+Sur ordinateur ou télévision en paysage (au moins 900 × 600 pixels), l’accueil répartit les cinq réglages en haut, la séance et les démonstrations côte à côte, et les exercices dans un bandeau inférieur. La liste des exercices est directement visible. Les réglages et les identifiants des commandes utilisés par Hermès sont conservés. Les écrans étroits gardent un défilement vertical pour conserver la lisibilité.
