@@ -1,6 +1,6 @@
 import {validate,plan} from './planner.mjs';
 import {parseSettings} from './settings.mjs';
-import {DemoPlayer,validateDemos,videoUrl,demoVideos} from './media.mjs?v=tv-compact-1';
+import {DemoPlayer,validateDemos,videoUrl,demoVideos} from './media.mjs?v=yt-premium-1';
 const $=id=>document.getElementById(id);let data,current,steps=[],index=0,remaining=0,deadline=0,running=false,active=false,elapsed=0,last=0,audio,started,completed=false;
 let demos={},watching=false,demoExercise=null,demoSelection=0;
 const inlineDemo=new DemoPlayer($('demo-video'),$('demo-status'));
