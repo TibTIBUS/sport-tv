@@ -55,7 +55,7 @@ export class DemoPlayer{
     const iframe=this.container.querySelector('iframe');if(iframe)inlineFrame(iframe,d.name);
     await player.setVolume(0);if(token!==this.token)return;
     this.status.textContent='Vidéo muette · consignes en français ci-dessous';this.playback(this.playing);
-   }else this.player=new API.Player(mount,{host:'https://www.youtube-nocookie.com',videoId:d.videoId,width:'100%',height:'100%',playerVars:{playsinline:1,fs:0,controls:1,rel:0,enablejsapi:1,origin:location.origin},events:{
+   }else this.player=new API.Player(mount,{host:'https://www.youtube.com',videoId:d.videoId,width:'100%',height:'100%',playerVars:{playsinline:1,fs:0,controls:1,rel:0,enablejsapi:1,origin:location.origin},events:{
     onReady:e=>{if(token!==this.token)return;inlineFrame(e.target.getIframe(),d.name);e.target.mute();this.status.textContent='Vidéo muette · consignes en français ci-dessous';this.playback(this.playing);},
     onStateChange:e=>{if(token!==this.token)return;if(e.data===0&&this.playing){e.target.seekTo(0);e.target.playVideo();}},onError:unavailable
    }});
