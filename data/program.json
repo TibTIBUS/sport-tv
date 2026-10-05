@@ -1,0 +1,182 @@
+{
+  "version": 1,
+  "exercises": {
+    "warm": {
+      "name": "Échauffement",
+      "cue": "Marche doucement sur place, puis augmente progressivement le rythme. Mobilise doucement les épaules et les hanches.",
+      "easy": "Marche tranquillement, sans forcer.",
+      "target": ""
+    },
+    "rest": {
+      "name": "Repos",
+      "cue": "Relâche les épaules. Respire et prépare ton espace pour le prochain mouvement.",
+      "easy": "Prolonge la pause si nécessaire.",
+      "target": ""
+    },
+    "cool": {
+      "name": "Retour au calme",
+      "cue": "Marche lentement puis ralentis ta respiration. Mobilise doucement les articulations sans forcer.",
+      "easy": "Reste dans une amplitude confortable.",
+      "target": ""
+    },
+    "squat": {
+      "name": "Squat contrôlé",
+      "cue": "Pieds stables, recule les hanches et fléchis les genoux dans une amplitude confortable. Remonte sans rebond.",
+      "easy": "Fais une petite flexion, sans haltère.",
+      "target": "6 à 10 répétitions contrôlées, puis repose-toi"
+    },
+    "push": {
+      "name": "Pompes au mur",
+      "cue": "Mains sur un mur, corps aligné. Fléchis les coudes puis repousse le mur en soufflant.",
+      "easy": "Rapproche les pieds du mur.",
+      "target": "6 à 12 répétitions, puis repose-toi"
+    },
+    "row": {
+      "name": "Tirage avec haltère",
+      "cue": "Prends appui avec la main libre sur un support fixe et stable. Buste incliné, dos neutre, tire le coude vers la hanche puis redescends lentement. Change de côté à mi-temps.",
+      "easy": "Sans charge, ramène le coude vers la hanche.",
+      "target": "4 à 6 répétitions par côté"
+    },
+    "hinge": {
+      "name": "Hanches en arrière",
+      "cue": "Genoux légèrement fléchis, recule les hanches en gardant le dos stable. Redresse-toi. Haltères facultatifs.",
+      "easy": "Sans charge et avec un mouvement plus court.",
+      "target": "6 à 10 répétitions contrôlées"
+    },
+    "bridge": {
+      "name": "Pont de hanches",
+      "cue": "Au sol sur le dos, pieds à plat. Soulève doucement le bassin sans creuser le dos, puis redescends.",
+      "easy": "Soulève moins haut, sans charge.",
+      "target": "8 à 12 répétitions contrôlées"
+    },
+    "core": {
+      "name": "Stabilité du tronc",
+      "cue": "À quatre pattes, dos stable. Glisse alternativement un pied vers l’arrière sans tourner le bassin.",
+      "easy": "Garde les mains et les genoux au sol et contracte doucement le ventre.",
+      "target": "Mouvement lent, respiration libre"
+    },
+    "curl": {
+      "name": "Flexion des bras",
+      "cue": "Coudes près du corps, monte puis redescends les haltères sans balancer le buste. Utilise une seule charge tenue à deux mains si nécessaire.",
+      "easy": "Fais le mouvement sans charge.",
+      "target": "6 à 10 répétitions, puis repose-toi"
+    },
+    "march": {
+      "name": "Marche active sur place",
+      "cue": "Marche sur place en accompagnant le mouvement avec les bras. Garde un rythme permettant de parler.",
+      "easy": "Ralentis et lève moins les pieds.",
+      "target": ""
+    },
+    "step": {
+      "name": "Pas latéraux",
+      "cue": "Fais un pas à droite, rapproche l’autre pied, puis repars à gauche. Sans saut ni pivot.",
+      "easy": "Fais de petits pas, lentement.",
+      "target": ""
+    },
+    "mobility": {
+      "name": "Mobilité des épaules",
+      "cue": "Debout, fais de petits cercles avec les épaules, puis rapproche et relâche doucement les omoplates.",
+      "easy": "Réduis l’amplitude, sans charge.",
+      "target": ""
+    },
+    "ankle": {
+      "name": "Mobilité des chevilles",
+      "cue": "Assis ou avec un appui stable, lève doucement les pointes des pieds puis les talons.",
+      "easy": "Fais de petits mouvements assis.",
+      "target": ""
+    }
+  },
+  "gentle": [
+    "mobility",
+    "ankle"
+  ],
+  "afterRun": [
+    "push",
+    "row",
+    "curl",
+    "core"
+  ],
+  "days": [
+    {
+      "day": "Lundi",
+      "title": "Renforcement A",
+      "exercises": [
+        "squat",
+        "push",
+        "row",
+        "bridge",
+        "core"
+      ],
+      "strength": true,
+      "rest": false
+    },
+    {
+      "day": "Mardi",
+      "title": "Cardio sans sauts",
+      "exercises": [
+        "march",
+        "step",
+        "march",
+        "mobility"
+      ],
+      "strength": false,
+      "rest": false
+    },
+    {
+      "day": "Mercredi",
+      "title": "Renforcement B",
+      "exercises": [
+        "hinge",
+        "push",
+        "row",
+        "curl",
+        "core"
+      ],
+      "strength": true,
+      "rest": false
+    },
+    {
+      "day": "Jeudi",
+      "title": "Cardio et tronc",
+      "exercises": [
+        "march",
+        "step",
+        "core",
+        "march"
+      ],
+      "strength": false,
+      "rest": false
+    },
+    {
+      "day": "Vendredi",
+      "title": "Renforcement A",
+      "exercises": [
+        "squat",
+        "push",
+        "row",
+        "bridge",
+        "core"
+      ],
+      "strength": true,
+      "rest": false
+    },
+    {
+      "day": "Samedi",
+      "title": "Récupération active",
+      "exercises": [
+        "march",
+        "mobility",
+        "ankle"
+      ],
+      "strength": false,
+      "rest": false
+    },
+    {
+      "day": "Dimanche",
+      "title": "Repos",
+      "exercises": [],
+      "strength": false,
+      "rest": true
+    }
+  ]
+}

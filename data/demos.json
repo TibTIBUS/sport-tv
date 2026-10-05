@@ -1,0 +1,236 @@
+{
+  "squat": {
+    "videoId": "5C9cXLIhltE",
+    "publisher": "Kingston and Richmond NHS — Physiotherapy",
+    "source": "https://www.kingstonandrichmond.nhs.uk/services/service-search-z/physiotherapy-msk-richmond",
+    "name": "Squat contrôlé",
+    "points": [
+      "Garde les pieds stables et descends dans une amplitude confortable.",
+      "Remonte progressivement, sans rebond."
+    ],
+    "avoid": "Évite de forcer la profondeur ou de laisser les genoux s'effondrer vers l'intérieur.",
+    "note": "Démonstration sans haltères. Commence sans charge pour apprendre le mouvement."
+  },
+  "push": {
+    "videoId": "kmzcmFZ9NyY",
+    "publisher": "South Tees Hospitals NHS — Physiotherapy",
+    "source": "https://www.southtees.nhs.uk/resources/combined-press-ups/",
+    "name": "Pompes au mur",
+    "points": [
+      "Place les mains sur le mur à hauteur des épaules.",
+      "Fléchis les coudes, puis repousse en gardant le corps aligné."
+    ],
+    "avoid": "Évite de creuser le dos ou de laisser le bassin partir en arrière.",
+    "note": "Rapproche les pieds du mur pour diminuer la difficulté."
+  },
+  "row": {
+    "videoId": "4k8wOXHoZ_w",
+    "publisher": "Michelle Kenway — Physiothérapeute",
+    "source": "https://www.pelvicexercises.com.au/dumbbell-row/",
+    "name": "Tirage avec haltère",
+    "points": [
+      "Prends appui avec la main libre sur un support fixe et stable ; garde le dos neutre.",
+      "Ramène le coude vers la hanche, puis redescends lentement. Change de côté à mi-temps."
+    ],
+    "avoid": "Évite de tourner le buste ou de tirer avec un mouvement brusque.",
+    "note": "Tutoriel complet avec appui. Choisis un support fixe qui ne bascule pas et une charge facile à contrôler."
+  },
+  "hinge": {
+    "videoId": "2W_gXhut5S8",
+    "publisher": "Hinge Health — Physical Therapists",
+    "source": "https://www.hingehealth.com/fr/fr/resources/articles/hip-hinge/",
+    "name": "Hanches en arrière",
+    "points": [
+      "Garde les genoux légèrement souples et pousse les hanches vers l'arrière.",
+      "Incline le buste depuis les hanches en gardant le dos neutre, puis redresse-toi."
+    ],
+    "avoid": "Évite d'arrondir le dos pour descendre plus bas.",
+    "note": "Apprentissage sans charge. Haltères facultatifs une fois le geste maîtrisé."
+  },
+  "bridge": {
+    "videoId": "WK-5Pb9nNwQ",
+    "publisher": "Kingston and Richmond NHS — Physiotherapy",
+    "source": "https://www.kingstonandrichmond.nhs.uk/services/service-search-z/physiotherapy-msk-richmond",
+    "name": "Pont de hanches",
+    "points": [
+      "Sur le dos, pose les pieds à plat et garde les genoux fléchis.",
+      "Soulève le bassin avec contrôle, puis repose-le doucement."
+    ],
+    "avoid": "Évite de monter en creusant excessivement le bas du dos.",
+    "note": "Pont à deux jambes, sans charge."
+  },
+  "core": {
+    "name": "Stabilité du tronc",
+    "videoId": "hm2LwJb6yPw",
+    "provider": "youtube",
+    "publisher": "Body Works Sports Physiotherapy — Dana Ranahan",
+    "source": "https://body-works.ca/physio-video/core-strength-four-point-kneeling-with-heel-slides/",
+    "points": [
+      "Place les mains sous les épaules et les genoux sous les hanches.",
+      "Glisse un pied vers l’arrière en le gardant au sol, puis reviens et change de côté."
+    ],
+    "avoid": "Évite de tourner le bassin, de creuser le dos ou de lever la jambe.",
+    "note": "La vidéo montre le glissement du pied prévu ici, pas un lever du bras et de la jambe."
+  },
+  "curl": {
+    "name": "Flexion des bras",
+    "videoId": "PMpdp6EnJY0",
+    "provider": "youtube",
+    "publisher": "Hawkes Physiotherapy",
+    "source": "https://hawkesphysiotherapy.co.uk/exercise/dumbbell-bicep-curls-in-supination/",
+    "points": [
+      "Garde les paumes vers l’avant et les poignets dans l’axe des avant-bras.",
+      "Fléchis les coudes puis redescends les charges lentement, sans élan."
+    ],
+    "avoid": "Évite de balancer le buste pour soulever les haltères.",
+    "note": "Démonstration avec un haltère dans chaque main. Les 5 kg ne sont pas obligatoires : utilise le bouton Plus facile si la charge ne reste pas contrôlable."
+  },
+  "march": {
+    "name": "Marche sur place",
+    "videoId": "418873416",
+    "provider": "vimeo",
+    "publisher": "Lancashire Teaching Hospitals NHS — Physiotherapy",
+    "source": "https://www.lancsteachinghospitals.nhs.uk/trauma-exercises",
+    "points": [
+      "Alterne les appuis en levant les pieds à une hauteur confortable.",
+      "Reste droit, respire librement et garde un rythme qui permet de parler."
+    ],
+    "avoid": "Évite les sauts et les montées de genou forcées.",
+    "note": "La vidéo montre la marche avec un appui. Utilise un support fixe si nécessaire ; le rythme du modèle n’est pas une consigne de vitesse."
+  },
+  "step": {
+    "name": "Pas latéraux",
+    "videoId": "iB20iEMWpDA",
+    "provider": "youtube",
+    "publisher": "Peak Physio",
+    "source": "https://www.peak-physio.com.au/exercise/side-stepping/",
+    "points": [
+      "Fais un pas sur le côté, puis rapproche l’autre pied.",
+      "Repars de l’autre côté en gardant les pointes des pieds vers l’avant."
+    ],
+    "avoid": "Évite de croiser les jambes, de pivoter ou de sauter.",
+    "note": "Démonstration avec un appui stable, sans obstacle ni élastique. Fais des pas de largeur confortable."
+  },
+  "mobility": {
+    "name": "Cercles des épaules",
+    "videoId": "Bv8QPOs7xks",
+    "provider": "youtube",
+    "publisher": "National University Health System — Physiotherapy",
+    "source": "https://www.youtube.com/watch?v=Bv8QPOs7xks",
+    "points": [
+      "Laisse les bras détendus et fais de petits cercles avec les épaules.",
+      "Déplace les épaules lentement, dans une amplitude confortable."
+    ],
+    "avoid": "Évite de faire des cercles avec la tête ou de forcer l’amplitude.",
+    "note": "Premier geste de la mobilité des épaules. Le second geste est disponible avec le bouton Omoplates.",
+    "more": [
+      {
+        "name": "Omoplates",
+        "videoId": "_TI_RXSAyfU",
+        "provider": "youtube",
+        "publisher": "Restore Plus Physical Therapy",
+        "source": "https://www.youtube.com/watch?v=_TI_RXSAyfU",
+        "points": [
+          "Rapproche doucement les omoplates sans hausser les épaules.",
+          "Relâche et recommence lentement en continuant à respirer."
+        ],
+        "avoid": "Évite de creuser le dos ou de serrer avec force.",
+        "note": "Second geste de la mobilité des épaules, sans charge."
+      }
+    ]
+  },
+  "ankle": {
+    "name": "Mobilité des chevilles — assis",
+    "videoId": "JegXz_XPgwk",
+    "provider": "youtube",
+    "publisher": "Arthritis Foundation — Walk With Ease",
+    "source": "https://www.youtube.com/watch?v=JegXz_XPgwk",
+    "points": [
+      "Assieds-toi sur une chaise stable, les pieds posés au sol.",
+      "Lève les pointes en gardant les talons au sol, puis lève les talons en gardant les pointes au sol."
+    ],
+    "avoid": "Évite les mouvements brusques et garde une amplitude confortable.",
+    "note": "Démonstration assise. Observe le geste ; le minuteur du site fixe la durée et tu gardes ton propre rythme."
+  },
+  "warm": {
+    "name": "Échauffement — marche",
+    "videoId": "418873416",
+    "provider": "vimeo",
+    "publisher": "Lancashire Teaching Hospitals NHS — Physiotherapy",
+    "source": "https://www.lancsteachinghospitals.nhs.uk/trauma-exercises",
+    "points": [
+      "Alterne les appuis en levant les pieds à une hauteur confortable.",
+      "Reste droit, respire librement et garde un rythme qui permet de parler."
+    ],
+    "avoid": "Évite les sauts et les montées de genou forcées.",
+    "note": "Commence doucement, puis augmente progressivement le rythme. Pour mobiliser les épaules et les hanches, consulte les autres gestes de cette étape. Ces vidéos montrent les gestes ; elles ne constituent pas une routine de quatre minutes.",
+    "more": [
+      {
+        "name": "Cercles des épaules",
+        "videoId": "Bv8QPOs7xks",
+        "provider": "youtube",
+        "publisher": "National University Health System — Physiotherapy",
+        "source": "https://www.youtube.com/watch?v=Bv8QPOs7xks",
+        "points": [
+          "Laisse les bras détendus et fais de petits cercles avec les épaules.",
+          "Déplace les épaules lentement, dans une amplitude confortable."
+        ],
+        "avoid": "Évite de faire des cercles avec la tête ou de forcer l’amplitude.",
+        "note": "Mobilise doucement les épaules, sans charge et sans forcer l’amplitude."
+      },
+      {
+        "videoId": "2W_gXhut5S8",
+        "publisher": "Hinge Health — Physical Therapists",
+        "source": "https://www.hingehealth.com/fr/fr/resources/articles/hip-hinge/",
+        "name": "Hanches en arrière",
+        "points": [
+          "Garde les genoux légèrement souples et pousse les hanches vers l'arrière.",
+          "Incline le buste depuis les hanches en gardant le dos neutre, puis redresse-toi."
+        ],
+        "avoid": "Évite d'arrondir le dos pour descendre plus bas.",
+        "note": "Apprentissage sans charge. Haltères facultatifs une fois le geste maîtrisé."
+      }
+    ]
+  },
+  "cool": {
+    "name": "Retour au calme — marche lente",
+    "videoId": "418873416",
+    "provider": "vimeo",
+    "publisher": "Lancashire Teaching Hospitals NHS — Physiotherapy",
+    "source": "https://www.lancsteachinghospitals.nhs.uk/trauma-exercises",
+    "points": [
+      "Alterne les appuis en levant les pieds à une hauteur confortable.",
+      "Reste droit, respire librement et garde un rythme qui permet de parler."
+    ],
+    "avoid": "Évite les sauts et les montées de genou forcées.",
+    "note": "Ralentis la marche et laisse la respiration revenir tranquillement. Les autres gestes de cette étape montrent une mobilisation douce ; garde une petite amplitude. Le minuteur du site donne la durée de cette phase.",
+    "more": [
+      {
+        "name": "Cercles des épaules",
+        "videoId": "Bv8QPOs7xks",
+        "provider": "youtube",
+        "publisher": "National University Health System — Physiotherapy",
+        "source": "https://www.youtube.com/watch?v=Bv8QPOs7xks",
+        "points": [
+          "Laisse les bras détendus et fais de petits cercles avec les épaules.",
+          "Déplace les épaules lentement, dans une amplitude confortable."
+        ],
+        "avoid": "Évite de faire des cercles avec la tête ou de forcer l’amplitude.",
+        "note": "Mobilise doucement les épaules, sans charge et sans forcer l’amplitude."
+      },
+      {
+        "name": "Mobilité des chevilles — assis",
+        "videoId": "JegXz_XPgwk",
+        "provider": "youtube",
+        "publisher": "Arthritis Foundation — Walk With Ease",
+        "source": "https://www.youtube.com/watch?v=JegXz_XPgwk",
+        "points": [
+          "Assieds-toi sur une chaise stable, les pieds posés au sol.",
+          "Lève les pointes en gardant les talons au sol, puis lève les talons en gardant les pointes au sol."
+        ],
+        "avoid": "Évite les mouvements brusques et garde une amplitude confortable.",
+        "note": "Démonstration assise. Observe le geste ; le minuteur du site fixe la durée et tu gardes ton propre rythme."
+      }
+    ]
+  }
+}
