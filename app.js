@@ -25,7 +25,7 @@ function updateDemo(s){
   const b=document.createElement('button');b.textContent=v.name;b.setAttribute('aria-pressed',String(n===demoSelection));
   b.onclick=()=>{if(running)$('pause').click();demoSelection=n;watching=true;render();};return b;
  }):[]));
- if(s.easier){inlineDemo.stop();$('demo-status').textContent='Variante facile : vidéo de référence retirée. Suis les consignes affichées à gauche.';}else inlineDemo.load(d,running||watching);
+ if(s.easier){inlineDemo.stop();$('demo-status').textContent='Variante facile : vidéo de référence retirée. Suis les consignes de la carte « Le bon geste ».';}else inlineDemo.load(d,running||watching);
  $('watch').disabled=!!s.easier;
 }
 function openDemo(d){$('dialog-title').textContent=d.name;demoText('dialog',d);$('demo-dialog').showModal();dialogDemo.load(d,true);}
