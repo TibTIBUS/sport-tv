@@ -26,6 +26,11 @@ export function validateDemos(demos,exercises){
   }
  }return demos;
 }
+function inlineFrame(iframe,name){
+ iframe.title='Démonstration : '+name;
+ iframe.removeAttribute('allowfullscreen');iframe.removeAttribute('webkitallowfullscreen');iframe.removeAttribute('mozallowfullscreen');
+ iframe.setAttribute('allow',"autoplay; encrypted-media; fullscreen 'none'; picture-in-picture 'none'; remote-playback 'none'; presentation 'none'");
+}
 export class DemoPlayer{
  constructor(container,status){this.container=container;this.status=status;this.token=0;this.playing=false;}
  stop(){this.token++;try{const result=this.player?.destroy();result?.catch?.(()=>{});}catch{}this.player=null;this.container.replaceChildren();this.key=null;this.playing=false;}
@@ -43,13 +48,15 @@ export class DemoPlayer{
    const API=await sdk(this.provider);if(token!==this.token)return;
    const mount=document.createElement('div');this.container.append(mount);
    if(this.provider==='vimeo'){
-    const player=new API.Player(mount,{id:Number(d.videoId),width:640,loop:true,muted:true,playsinline:true,dnt:true});this.player=player;player.on('error',unavailable);
+    const frame=document.createElement('iframe');inlineFrame(frame,d.name);
+    frame.src=`https://player.vimeo.com/video/${d.videoId}?loop=1&muted=1&playsinline=1&dnt=1&chromecast=0&airplay=0&fullscreen=0&pip=0`;
+    mount.replaceWith(frame);const player=new API.Player(frame);this.player=player;player.on('error',unavailable);
     await player.ready();if(token!==this.token)return;
-    const iframe=this.container.querySelector('iframe');if(iframe)iframe.title='Démonstration : '+d.name;
+    const iframe=this.container.querySelector('iframe');if(iframe)inlineFrame(iframe,d.name);
     await player.setVolume(0);if(token!==this.token)return;
     this.status.textContent='Vidéo muette · consignes en français ci-dessous';this.playback(this.playing);
-   }else this.player=new API.Player(mount,{host:'https://www.youtube-nocookie.com',videoId:d.videoId,width:'100%',height:'100%',playerVars:{playsinline:1,controls:1,rel:0,enablejsapi:1,origin:location.origin},events:{
-    onReady:e=>{if(token!==this.token)return;e.target.getIframe().title='Démonstration : '+d.name;e.target.mute();this.status.textContent='Vidéo muette · consignes en français ci-dessous';this.playback(this.playing);},
+   }else this.player=new API.Player(mount,{host:'https://www.youtube-nocookie.com',videoId:d.videoId,width:'100%',height:'100%',playerVars:{playsinline:1,fs:0,controls:1,rel:0,enablejsapi:1,origin:location.origin},events:{
+    onReady:e=>{if(token!==this.token)return;inlineFrame(e.target.getIframe(),d.name);e.target.mute();this.status.textContent='Vidéo muette · consignes en français ci-dessous';this.playback(this.playing);},
     onStateChange:e=>{if(token!==this.token)return;if(e.data===0&&this.playing){e.target.seekTo(0);e.target.playVideo();}},onError:unavailable
    }});
   }catch(e){if(token===this.token)this.status.textContent=e.message+' Les consignes restent disponibles.';}
