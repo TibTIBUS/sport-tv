@@ -79,10 +79,16 @@ Sélection des sources : 3 octobre 2026. Le catalogue est data/demos.json ; ne p
 
 ## Affichage télévision et Cast
 
-Pendant la séance, les écrans paysage d'au moins 900 × 500 pixels utilisent une mise en page compacte ajustée à la hauteur disponible. Le minuteur, le geste, les consignes et les commandes restent dans la même vue. Les écrans étroits conservent l'affichage vertical.
+Pendant la séance, les écrans paysage d'au moins 900 × 600 pixels utilisent une mise en page compacte ajustée à la hauteur disponible. Le minuteur, le geste, les consignes et les commandes restent dans la même vue. Les écrans étroits conservent l'affichage vertical.
 
 Le bouton « Plein écran » agrandit toute la page Sport TV. Le plein écran des vidéos intégrées est désactivé ; Vimeo masque aussi ses boutons Chromecast, AirPlay et Picture-in-Picture. Les iframes interdisent la présentation et la lecture distante de la vidéo seule. Hermès doit continuer à caster l'onglet Sport TV depuis Chrome. Vérifier le comportement réel sur la télévision : l'application ne contrôle pas les optimisations ni les réglages du récepteur Cast.
 
 ## YouTube Premium
 
 Le lecteur YouTube utilise désormais `www.youtube.com` pour permettre la reconnaissance d'une session YouTube Premium dans le même profil Chrome. Cela remplace le mode de confidentialité avancé `youtube-nocookie.com` : YouTube peut utiliser les cookies et associer les lectures au compte connecté. L'application ne récupère ni identifiant ni abonnement. Les annonces restent possibles si YouTube ne reconnaît pas la session ou si le navigateur bloque les cookies nécessaires ; aucune absence de publicité n'est garantie. Tester dans le profil dédié d'Hermès déjà connecté à YouTube Premium. Les réglages d'affichage intégré et le lecteur Vimeo sont conservés.
+
+## Thèmes clair et sombre
+
+Le thème 1 sombre est affiché par défaut : vidéo à gauche, chronomètre et consignes à droite. Le thème 2 clair utilise trois colonnes sur les grands écrans : chronomètre, vidéo, consignes. Le bouton soleil/lune en haut permet de passer de l'un à l'autre, y compris pendant la séance, sans relancer le lecteur ni le chronomètre. Le choix est conservé dans le stockage local de ce profil Chrome ; si ce stockage est indisponible, le bouton continue de fonctionner pour la page ouverte.
+
+Sur écran tactile, un glissement horizontal sur le texte ou une zone libre du contenu change de thème (gauche vers clair, droite vers sombre). Les gestes sur les vidéos, liens, sélecteurs et boutons sont laissés à ces contrôles. Le thème du téléphone et celui du Chrome d'Hermès restent indépendants. Les écrans étroits conservent un défilement vertical pour garder les consignes lisibles. Les écrans paysage utilisent une présentation ajustée à leur hauteur, avec une répartition adaptée sur les écrans moins hauts.

@@ -1,7 +1,10 @@
 import {validate,plan} from './planner.mjs';
 import {parseSettings} from './settings.mjs';
+import {initTheme} from './theme.mjs?v=themes-1';
 import {DemoPlayer,validateDemos,videoUrl,demoVideos} from './media.mjs?v=yt-premium-1';
 const $=id=>document.getElementById(id);let data,current,steps=[],index=0,remaining=0,deadline=0,running=false,active=false,elapsed=0,last=0,audio,started,completed=false;
+let themeStorage;try{themeStorage=localStorage;}catch{}
+initTheme(document.documentElement,$('theme-toggle'),document.querySelector('main'),themeStorage);
 let demos={},watching=false,demoExercise=null,demoSelection=0;
 const inlineDemo=new DemoPlayer($('demo-video'),$('demo-status'));
 const dialogDemo=new DemoPlayer($('dialog-video'),$('dialog-status'));
@@ -13,6 +16,7 @@ function updateDemo(s){
  const reference=demos[s.id];
  const visible=!!reference&&s.id!=='rest';
  $('demo-panel').hidden=!visible;
+ $('demo-guidance').hidden=!visible;
  if(!visible){inlineDemo.stop();demoExercise=null;return;}
  if(demoExercise!==s.id){demoExercise=s.id;demoSelection=0;}
  const videos=demoVideos(reference),d=videos[demoSelection]||reference;
@@ -64,9 +68,13 @@ function render(){
  $('stage-help').textContent=preparing?'Ne commence pas encore les répétitions. Regarde le geste et place-toi ; le départ arrive à la fin du compte à rebours.':s.phase==='Exercice'?'Fais le mouvement maintenant, à ton rythme. Termine les répétitions indiquées, puis repose-toi si du temps reste.':s.phase==='Récupération'?'Relâche les muscles. Cette pause fait partie de la séance.':s.phase==='Échauffement'?'Commence à bouger doucement. Augmente le rythme progressivement.':'Marche lentement et laisse ta respiration ralentir.';
  $('exercise').textContent=s.name;$('cue').textContent=s.cue;
  $('target').textContent=preparing?`À suivre : ${next?.seconds||0} secondes de mouvement · ${next?.target||'À ton rythme'}`:s.target||'À ton rythme';
- $('clock').setAttribute('aria-label',preparing?'Temps avant le départ':'Temps restant');$('clock').textContent=fmt(Math.ceil(remaining));
+ $('clock').setAttribute('aria-label',preparing?'Temps avant le départ':'Temps restant');$('clock-label').textContent=preparing?'Avant le départ':'Temps restant';updateClock();
  $('next').textContent=next?`Ensuite : ${phaseTitles[next.phase]||next.phase} · ${next.name} · ${next.seconds} s`:'Dernière étape';
- $('progress').value=100*(index/steps.length);$('pause').textContent=running?'Pause':'Reprendre';updateDemo(s);motivate();
+ $('progress').value=100*(index/steps.length);$('progress-label').textContent=Math.round(100*(index/steps.length))+' %';$('pause').textContent=running?'Pause':'Reprendre';updateDemo(s);motivate();
+}
+function updateClock(){
+ $('clock').textContent=fmt(Math.ceil(remaining));
+ $('clock-face').style.setProperty('--remaining',Math.max(0,Math.min(1,remaining/steps[index].seconds))*360+'deg');
 }
 function finish(done){$('rest-panel').classList.add('is-paused');inlineDemo.stop();watching=false;running=false;active=false;completed=done;$('result').textContent=done?'Séance terminée.':'Séance arrêtée.';show('finish');}
 function advance(){watching=false;if(++index>=steps.length){finish(true);return;}remaining=steps[index].seconds;deadline=performance.now()+remaining*1000;last=performance.now();render();beep();}
@@ -74,7 +82,7 @@ $('start').onclick=()=>{steps=current.steps.map(s=>({...s}));watching=false;inde
 $('pause').onclick=()=>{if(!active)return;watching=false;if(running){remaining=Math.max(0,(deadline-performance.now())/1000);running=false;}else{running=true;last=performance.now();deadline=last+remaining*1000;}render();};
 $('skip').onclick=()=>{if(active)advance();};$('stop').onclick=()=>{if(active)finish(false);};
 $('easy').onclick=()=>{for(let n=index;n<steps.length;n++)if(steps[n].phase==='Exercice'||steps[n].phase==='Préparation'){steps[n].easier=true;steps[n].cue=steps[n].easy;steps[n].target='Variante facile · À ton rythme';}render();};
-setInterval(()=>{if(!active||!running)return;const now=performance.now(),gap=now-last;if(gap>5000){remaining=Math.max(0,(deadline-last)/1000);running=false;render();$('next').textContent='Séance mise en pause après une interruption. Reprends quand tu es prêt.';return;}elapsed+=gap/1000;last=now;remaining=Math.max(0,(deadline-now)/1000);if(remaining<=0)advance();else {$('clock').textContent=fmt(Math.ceil(remaining));motivate();}},100);
+setInterval(()=>{if(!active||!running)return;const now=performance.now(),gap=now-last;if(gap>5000){remaining=Math.max(0,(deadline-last)/1000);running=false;render();$('next').textContent='Séance mise en pause après une interruption. Reprends quand tu es prêt.';return;}elapsed+=gap/1000;last=now;remaining=Math.max(0,(deadline-now)/1000);if(remaining<=0)advance();else {updateClock();motivate();}},100);
 $('back').onclick=()=>{show('setup');refresh();};
 $('download').onclick=()=>{const report={version:1,started,session:current.title,completed,activeSeconds:Math.round(elapsed),difficulty:$('difficulty').value,kneeDuring:$('feedback-knee').value,kneeNextMorning:null};const blob=new Blob([JSON.stringify(report,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=`bilan-${started.slice(0,10)}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
 $('fullscreen').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen();}catch{$('error').textContent='Le plein écran n’est pas disponible dans ce navigateur.';}};
