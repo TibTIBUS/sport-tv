@@ -1,6 +1,6 @@
 import {validate,plan} from './planner.mjs';
 import {parseSettings} from './settings.mjs';
-import {initTheme} from './theme.mjs?v=themes-1';
+import {initTheme} from './theme.mjs?v=themes-2';
 import {DemoPlayer,validateDemos,videoUrl,demoVideos} from './media.mjs?v=yt-premium-1';
 const $=id=>document.getElementById(id);let data,current,steps=[],index=0,remaining=0,deadline=0,running=false,active=false,elapsed=0,last=0,audio,started,completed=false;
 let themeStorage;try{themeStorage=localStorage;}catch{}

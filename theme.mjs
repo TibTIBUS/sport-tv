@@ -8,6 +8,11 @@ export function initTheme(root,button,surface,storage){
   button.setAttribute('aria-label',theme==='dark'?'Passer au thème clair':'Passer au thème sombre');
   button.title=theme==='dark'?'Thème 2 · Clair':'Thème 1 · Sombre';
   button.querySelector('.theme-label').textContent=theme==='dark'?'Clair':'Sombre';
+  const page=root.ownerDocument,timer=page.querySelector('.timer-card'),heading=page.querySelector('.session-heading'),footer=page.querySelector('.session-footer');
+  if(timer&&heading&&footer){
+   const target=page.getElementById('target'),motivation=page.getElementById('motivation');
+   if(theme==='light'){timer.append(target,motivation);}else{heading.append(target);footer.before(motivation);}
+  }
   try{storage?.setItem(storageKey,theme);}catch{}
  };
  apply(theme);
