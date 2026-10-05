@@ -1,6 +1,6 @@
 import {validate,plan} from './planner.mjs';
 import {parseSettings} from './settings.mjs';
-import {DemoPlayer,validateDemos,videoUrl,demoVideos} from './media.mjs?v=gestes-complets-2';
+import {DemoPlayer,validateDemos,videoUrl,demoVideos} from './media.mjs?v=tv-compact-1';
 const $=id=>document.getElementById(id);let data,current,steps=[],index=0,remaining=0,deadline=0,running=false,active=false,elapsed=0,last=0,audio,started,completed=false;
 let demos={},watching=false,demoExercise=null,demoSelection=0;
 const inlineDemo=new DemoPlayer($('demo-video'),$('demo-status'));
@@ -36,7 +36,7 @@ $('watch').onclick=()=>{if(running)$('pause').click();watching=true;inlineDemo.p
 for(const id of ['demo-original','demo-source'])$(id).onclick=()=>{if(running)$('pause').click();};
 const fmt=s=>`${Math.floor(s/60).toString().padStart(2,'0')}:${Math.ceil(s%60).toString().padStart(2,'0')}`;
 function beep(){try{if(!audio)return;const o=audio.createOscillator(),g=audio.createGain();o.connect(g);g.connect(audio.destination);g.gain.value=.08;o.frequency.value=660;o.start();o.stop(audio.currentTime+.15);}catch{}}
-function show(id){for(const s of ['setup','player','finish'])$(s).hidden=s!==id;}
+function show(id){document.body.classList.toggle('session-active',id==='player');for(const s of ['setup','player','finish'])$(s).hidden=s!==id;}
 function refresh(){try{current=plan(data,{day:Number($('day').value),minutes:Number($('duration').value),energy:$('energy').value,knee:$('knee').value,run:$('run').value});$('title').textContent=current.title;$('summary').textContent=current.steps.length?`${$('duration').value} minutes · Échauffement et pauses inclus · Deux haltères de 5 kg si adaptés`:'Jour de repos';$('notice').textContent=current.notice;$('start').disabled=!current.steps.length;$('preview').replaceChildren(...[...new Set(current.steps.filter(s=>s.phase==='Exercice').map(s=>s.name))].map(name=>{const li=document.createElement('li');li.textContent=name;return li;}));renderLibrary();}catch(e){$('error').textContent=e.message;$('start').disabled=true;}}
 const phaseTitles={Préparation:'Prépare-toi',Exercice:'À toi de jouer',Récupération:'Repos',Échauffement:'Échauffe-toi', 'Retour au calme':'Ralentis doucement'};
 const encouragements=[

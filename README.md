@@ -76,3 +76,9 @@ Le tirage est maintenant explicité avec appui sur un support fixe et stable, po
 - Pointes et talons assis : [Arthritis Foundation — Walk With Ease](https://www.youtube.com/watch?v=JegXz_XPgwk).
 
 Sélection des sources : 3 octobre 2026. Le catalogue est data/demos.json ; ne pas y ajouter des vidéos dont la variante ne correspond pas à l'exercice. Ne pas remplacer les vidéos par des gestes générés par IA. Les auteurs conservent leurs droits : aucune autorisation de réhéberger ces fichiers n'est supposée.
+
+## Affichage télévision et Cast
+
+Pendant la séance, les écrans paysage d'au moins 900 × 500 pixels utilisent une mise en page compacte ajustée à la hauteur disponible. Le minuteur, le geste, les consignes et les commandes restent dans la même vue. Les écrans étroits conservent l'affichage vertical.
+
+Le bouton « Plein écran » agrandit toute la page Sport TV. Le plein écran des vidéos intégrées est désactivé ; Vimeo masque aussi ses boutons Chromecast, AirPlay et Picture-in-Picture. Les iframes interdisent la présentation et la lecture distante de la vidéo seule. Hermès doit continuer à caster l'onglet Sport TV depuis Chrome. Vérifier le comportement réel sur la télévision : l'application ne contrôle pas les optimisations ni les réglages du récepteur Cast.
