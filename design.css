@@ -40,6 +40,11 @@ h1,h2 {font-weight:800;letter-spacing:-.04em}
 .eyebrow {font-size:.7rem;font-weight:800;letter-spacing:.14em}
 .home-heading h1 {letter-spacing:-.045em;line-height:1.12}
 .home-heading h1 em {font-family:Georgia,"Times New Roman",serif;font-weight:500;color:var(--accent);white-space:nowrap}
+/* Carry the home headline's italic into the workout, without changing its
+   measured TV type sizes or the numeric timer and instructional body copy. */
+#player #exercise,#player .technique-card h2,#player .rest-panel h2,#player #stage-title {
+ font-family:Georgia,"Times New Roman",serif;font-style:italic;font-weight:500;letter-spacing:-.025em;
+}
 .home-heading>.muted {font-size:.8rem}
 .home-heading .eyebrow::before {content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--cta);margin:0 .6em .12em 0}
 .session-card,#setup .demo-library,.home-preview,.settings,.media-card,.timer-card,.technique-card,.session-footer {
