@@ -1,0 +1,105 @@
+/* Warm editorial identity, inspired by the reference's cream and coral palette.
+   Geometry belongs to style.css and tv-layout.css: these styles dress both. */
+:root {
+ --bg:#171513;--panel:#211e1b;--soft:#2b2622;--text:#fcf4eb;--muted:#c5b8ac;
+ --border:#51463e;--accent:#ff9983;--ink:#27120c;--cta:#fb684b;
+ --warn:#f2ce8c;--warn-bg:#352b1d;--danger:#ffaaa1;--danger-bg:#382320;
+ --glow:rgba(251,84,54,.12);--tint:rgba(251,84,54,.08);
+ --shadow:0 12px 40px #0000001a;
+ font-family:"Avenir Next",Manrope,system-ui,sans-serif;
+}
+:root[data-theme="light"] {
+ --bg:#faf2e8;--panel:#fffcf8;--soft:#f3e6d9;--text:#2b211b;--muted:#6c5b4e;
+ --border:#d8c6b5;--accent:#b93620;--ink:#291109;--cta:#fb684b;
+ --warn:#795217;--warn-bg:#f5e7c9;--danger:#a12e26;--danger-bg:#fbe4df;
+ --glow:rgba(251,84,54,.16);--tint:rgba(251,84,54,.06);
+ --shadow:0 12px 40px #71401c0a;
+}
+body {
+ background:radial-gradient(ellipse at 96% 9%,var(--glow),transparent 48%),
+ radial-gradient(ellipse at 3% 95%,var(--tint),transparent 52%),var(--bg);
+ min-height:100vh;
+}
+header {background:var(--panel);border-color:var(--border)}
+header strong.brand {display:flex;align-items:center;gap:.55em;letter-spacing:-.04em;line-height:1;font-weight:850}
+.brand>svg {width:1.7em;height:1.7em;flex:none;background:var(--cta);border-radius:.5em;stroke:var(--ink);stroke-width:2.5;fill:none;stroke-linecap:round}
+.brand-tv {font-weight:450;margin-left:.15em}
+header>span {font-size:.75rem}
+button,select {border-radius:12px}
+button {transition:background-color .15s,border-color .15s,box-shadow .15s}
+button:hover {filter:none;background:var(--panel);border-color:var(--accent)}
+button.primary,#tv-option-list button[aria-pressed="true"] {
+ background:var(--cta);color:var(--ink);border-color:var(--cta);font-weight:800;
+}
+button.primary:hover {box-shadow:0 5px 24px var(--glow)}
+button:focus-visible,select:focus-visible,summary:focus-visible,a:focus-visible {outline-color:var(--accent)}
+select,.tv-setting {background:var(--bg)}
+.header-actions button {background:transparent;border-color:var(--border);font-weight:650;border-radius:10px}
+.header-actions button:hover {background:var(--soft)}
+h1,h2 {font-weight:800;letter-spacing:-.04em}
+.eyebrow {font-size:.7rem;font-weight:800;letter-spacing:.14em}
+.home-heading h1 {letter-spacing:-.045em;line-height:1.12}
+.home-heading h1 em {font-family:Georgia,"Times New Roman",serif;font-weight:500;color:var(--accent);white-space:nowrap}
+/* Carry the home headline's italic into the workout, without changing its
+   measured TV type sizes or the numeric timer and instructional body copy. */
+#player #exercise,#player .technique-card h2,#player .rest-panel h2,#player #stage-title {
+ font-family:Georgia,"Times New Roman",serif;font-style:italic;font-weight:500;letter-spacing:-.025em;
+}
+.home-heading>.muted {font-size:.8rem}
+.home-heading .eyebrow::before {content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--cta);margin:0 .6em .12em 0}
+.session-card,#setup .demo-library,.home-preview,.settings,.media-card,.timer-card,.technique-card,.session-footer {
+ box-shadow:var(--shadow);
+}
+#setup .session-card {
+ background:radial-gradient(ellipse at 100% 0%,var(--glow),transparent 75%),var(--panel);
+ border-color:var(--accent);position:relative;overflow:hidden;
+}
+#setup .session-card #title {letter-spacing:-.04em}
+#setup #start::after {content:" →";margin-left:.5em}
+#setup .demo-library h2 {letter-spacing:-.035em}
+#setup .demo-list {counter-reset:movement}
+#setup .demo-list button {counter-increment:movement;position:relative;background:var(--bg);border-color:var(--border)}
+#setup .demo-list button::before {content:counter(movement,decimal-leading-zero);display:block;color:var(--accent);font-size:.7em;letter-spacing:.1em;margin-bottom:.3em;font-weight:800}
+#setup .demo-list button:hover {background:var(--soft);border-color:var(--accent)}
+.home-preview {box-shadow:none;background:transparent}
+.home-preview h2 {color:var(--muted);font-weight:650;letter-spacing:0}
+.home-preview li {background:var(--panel)}
+.stage {background:var(--tint)}
+.timer-card {background:var(--panel)}
+#clock {color:var(--accent);font-weight:800}
+.clock-face {background:conic-gradient(var(--cta) var(--remaining),var(--border) 0)}
+.technique-card h2 {color:var(--accent)}
+.motivation {background:var(--tint);color:var(--text);border:1px solid var(--border);font-weight:600}
+.rest-panel {background:radial-gradient(ellipse at center,var(--glow),transparent 80%),var(--panel)}
+.rest-orb-core {background:radial-gradient(circle at 35% 30%,#ffe1ba,#fb8969 55%,#bd482c)}
+progress {accent-color:var(--cta)}
+progress::-webkit-progress-bar {background:var(--soft);border-radius:20px}
+progress::-webkit-progress-value {background:var(--cta);border-radius:20px}
+progress::-moz-progress-bar {background:var(--cta);border-radius:20px}
+.tv-options-card,.sound-card,dialog {box-shadow:0 24px 90px #0005}
+.tv-options-card {border-width:1px}
+.tv-overlay,.sound-overlay {background:#100b08cc}
+.sound-card h2,.dialog-heading h2 {letter-spacing:-.035em}
+#finish {max-width:760px;margin:auto}
+#finish label {margin-bottom:1rem}
+#finish button {margin:.3rem .3rem .3rem 0}
+/* Keep the tested TV geometry, including the small-height control targets. */
+@media(orientation:landscape) {
+ :root.tv-mode #setup .home-heading h1 {font-size:clamp(18px,calc(var(--tv-vh)*3.4),32px)}
+ :root.tv-mode #setup .demo-list button::before {display:inline;margin:0 .55em 0 0;font-size:.8em}
+ :root.tv-mode #setup .home-preview {background:transparent;box-shadow:none}
+ :root.tv-mode #player .timer-card {background:var(--panel)}
+ :root.tv-mode #setup .tv-setting {background:var(--bg)}
+}
+@media(min-width:900px) and (min-height:600px) {
+ :root:not(.tv-mode) #setup .home-heading {padding:8px 3px 12px}
+ :root:not(.tv-mode) #setup .home-heading h1 {font-size:clamp(28px,4.5vh,48px)}
+ :root:not(.tv-mode) #setup .home-heading .eyebrow {margin-bottom:8px;font-size:10px}
+}
+@media(max-width:500px) {
+ header strong.brand {gap:.3em}
+ .brand>svg {width:1.5em;height:1.5em}
+ .home-heading h1 {font-size:2rem}
+ .home-heading h1 em {display:block}
+}
+@media(prefers-reduced-motion:reduce) {button {transition:none}}
