@@ -84,6 +84,46 @@
       "cue": "Assis ou avec un appui stable, lève doucement les pointes des pieds puis les talons.",
       "easy": "Fais de petits mouvements assis.",
       "target": ""
+    },
+    "plank": {
+      "name": "Gainage sur les coudes",
+      "cue": "Face au sol, coudes sous les épaules. Garde le corps aligné et respire pendant le maintien.",
+      "easy": "Pose les genoux au sol, garde le tronc aligné et fais une pause dès que nécessaire.",
+      "target": "Maintien 45 s · Respiration libre",
+      "seconds": 45,
+      "mode": "hold"
+    },
+    "side_left": {
+      "name": "Gainage côté gauche",
+      "cue": "Appui sur l’avant-bras gauche, coude sous l’épaule. Soulève le bassin et garde le corps aligné, sans tourner.",
+      "easy": "Garde les genoux fléchis au sol pour réduire le levier. Fais une pause si nécessaire.",
+      "target": "Maintien 30 s · Côté gauche au sol",
+      "seconds": 30,
+      "mode": "hold"
+    },
+    "side_right": {
+      "name": "Gainage côté droit",
+      "cue": "Appui sur l’avant-bras droit, coude sous l’épaule. Soulève le bassin et garde le corps aligné, sans tourner.",
+      "easy": "Garde les genoux fléchis au sol pour réduire le levier. Fais une pause si nécessaire.",
+      "target": "Maintien 30 s · Côté droit au sol",
+      "seconds": 30,
+      "mode": "hold"
+    },
+    "plank_dynamic": {
+      "name": "Gainage dynamique sur les coudes",
+      "cue": "En appui sur les avant-bras, ramène un genou vers la poitrine, replace le pied puis alterne. Garde le bassin stable, sans chercher à toucher la poitrine.",
+      "easy": "Ralentis et réduis l’amplitude. Repose les genoux et récupère si le geste ne reste pas confortable.",
+      "target": "45 s · Genoux alternés · Sans précipitation",
+      "seconds": 45,
+      "mode": "dynamic"
+    },
+    "wall_sit": {
+      "name": "Chaise contre le mur",
+      "cue": "Dos contre un mur, pieds avancés et à plat. Descends à la hauteur montrée par ton kiné, puis maintiens en respirant.",
+      "easy": "Reste plus haut contre le mur et fais une pause dès que nécessaire.",
+      "target": "Maintien 45 s · Dos contre le mur",
+      "seconds": 45,
+      "mode": "hold"
     }
   },
   "gentle": [
@@ -178,5 +218,17 @@
       "strength": false,
       "rest": true
     }
-  ]
+  ],
+  "circuit": {
+    "rounds": 3,
+    "prepareSeconds": 10,
+    "restSeconds": 15,
+    "exercises": [
+      "plank",
+      "side_left",
+      "side_right",
+      "plank_dynamic",
+      "wall_sit"
+    ]
+  }
 }

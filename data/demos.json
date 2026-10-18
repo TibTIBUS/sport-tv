@@ -232,5 +232,70 @@
         "note": "Démonstration assise. Observe le geste ; le minuteur du site fixe la durée et tu gardes ton propre rythme."
       }
     ]
+  },
+  "plank": {
+    "name": "Gainage sur les coudes",
+    "points": [
+      "Face au sol, coudes sous les épaules.",
+      "Respire librement ; garde une position confortable."
+    ],
+    "avoid": "Ne bloque pas la respiration et ne poursuis pas un mouvement douloureux.",
+    "note": "Le chronomètre fixe la durée. Tu peux relâcher la position ou mettre en pause avant la fin.",
+    "videoId": "o5QMoXuoZs4",
+    "provider": "youtube",
+    "source": "https://www.peak-physio.com.au/exercise/plank-forearms/",
+    "publisher": "Peak Physio"
+  },
+  "side_left": {
+    "name": "Gainage côté gauche",
+    "points": [
+      "Appui sur l’avant-bras gauche, coude sous l’épaule.",
+      "Respire librement ; garde une position confortable."
+    ],
+    "avoid": "Ne bloque pas la respiration et ne poursuis pas un mouvement douloureux.",
+    "note": "Schéma simplifié, à utiliser comme rappel du geste appris. Le chronomètre fixe la durée. Tu peux relâcher la position ou mettre en pause avant la fin.",
+    "provider": "illustration",
+    "asset": "assets/side_left.svg",
+    "source": "https://holisticphysiofitness.com.au/exercise/side-plank-isometric-hold/",
+    "publisher": "Repères : Holistic Physio Fitness"
+  },
+  "side_right": {
+    "name": "Gainage côté droit",
+    "points": [
+      "Appui sur l’avant-bras droit, coude sous l’épaule.",
+      "Respire librement ; garde une position confortable."
+    ],
+    "avoid": "Ne bloque pas la respiration et ne poursuis pas un mouvement douloureux.",
+    "note": "Schéma simplifié, à utiliser comme rappel du geste appris. Le chronomètre fixe la durée. Tu peux relâcher la position ou mettre en pause avant la fin.",
+    "provider": "illustration",
+    "asset": "assets/side_right.svg",
+    "source": "https://holisticphysiofitness.com.au/exercise/side-plank-isometric-hold/",
+    "publisher": "Repères : Holistic Physio Fitness"
+  },
+  "plank_dynamic": {
+    "name": "Gainage dynamique sur les coudes",
+    "points": [
+      "Reste sur les coudes, avec les épaules au-dessus des appuis.",
+      "Un genou avance, le pied revient, puis l’autre genou avance."
+    ],
+    "avoid": "Ne force pas le contact genou-poitrine ; ne croise pas les genoux et ne tourne pas le bassin.",
+    "note": "Schéma simplifié, à utiliser comme rappel du geste appris. Le chronomètre fixe la durée. Tu peux relâcher la position ou mettre en pause avant la fin.",
+    "provider": "illustration",
+    "asset": "assets/plank_dynamic.svg",
+    "source": "https://experiencelife.lifetime.life/article/break-it-down-the-mountain-climber/",
+    "publisher": "Repères : Life Time — Experience Life"
+  },
+  "wall_sit": {
+    "name": "Chaise contre le mur",
+    "points": [
+      "Dos contre un mur, pieds avancés et à plat.",
+      "Respire librement ; garde une position confortable."
+    ],
+    "avoid": "Ne bloque pas la respiration et ne poursuis pas un mouvement douloureux.",
+    "note": "Le chronomètre fixe la durée. Tu peux relâcher la position ou mettre en pause avant la fin.",
+    "videoId": "ImNN11vubVU",
+    "provider": "youtube",
+    "source": "https://www.peak-physio.com.au/exercise/deep-wall-squat/",
+    "publisher": "Peak Physio"
   }
 }

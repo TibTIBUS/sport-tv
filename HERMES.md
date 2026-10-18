@@ -19,3 +19,8 @@ Lancer un serveur HTTP dans le dossier du projet, accessible depuis le réseau d
 ## Planification à décider
 
 Confirmer l'heure souhaitée et le fuseau Europe/Paris, la destination du lecteur et le mécanisme de publication avant d'installer une tâche récurrente. Une mise à jour Git ne met pas automatiquement à jour une page déjà ouverte : recharger le lecteur après une mise à jour, en dehors d'une séance.
+
+
+## Circuit gainage et chaise
+
+La configuration optionnelle `circuit` dans `data/program.json` définit les trois passages et les durées fixes. Le lecteur l’ajoute uniquement aux séances de renforcement non adaptées. Choisir 25 ou 30 minutes pour ces séances ; 20 minutes affiche un blocage explicite. Les jours doux et l’adaptation après course gardent leur fonctionnement. Les démonstrations peuvent être des vidéos officielles ou des schémas SVG locaux référencés dans `data/demos.json`. Toujours lire le résumé avant de lancer la séance.
