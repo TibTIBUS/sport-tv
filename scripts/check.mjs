@@ -1,6 +1,6 @@
 import {readFileSync} from 'node:fs';
 import assert from 'node:assert/strict';
-import {validate,plan} from '../planner.mjs';
+import {validate,plan,sessions} from '../planner.mjs';
 import {parseSettings} from '../settings.mjs';
 const data=validate(JSON.parse(readFileSync(new URL('../data/program.json',import.meta.url),'utf8')));
 for(const ids of [data.gentle,data.afterRun])assert(ids.length&&ids.every(id=>data.exercises[id]));
@@ -8,7 +8,7 @@ for(let day=0;day<6;day++)for(const minutes of [20,25,30])for(const energy of ['
  const p=plan(data,{day,minutes,energy,knee,run});
  if(knee==='pain'||(data.days[day].strength&&minutes===20&&energy!=='tired'&&knee==='ok'&&run==='no')){assert.equal(p.steps.length,0);if(knee!=='pain')assert.match(p.notice,/25 minutes/);}else{assert.equal(p.steps.reduce((s,e)=>s+e.seconds,0),minutes*60);assert(p.steps.every(s=>s.seconds>0&&s.cue&&s.easy));}
 }
-assert.equal(plan(data,{day:6,minutes:25,energy:'good',knee:'ok',run:'no'}).steps.length,0);
+assert(plan(data,{day:6,minutes:25,energy:'good',knee:'ok',run:'no'}).steps.length>0,'Sunday bookmark must allow a session');
 assert(plan(data,{day:0,minutes:25,energy:'good',knee:'ok',run:'yes'}).title.includes('Après la course'));
 assert.throws(()=>validate({...data,days:[]}));
 const {validateDemos}=await import('../media.mjs');
@@ -26,7 +26,23 @@ r=parseSettings('?duree=45&forme=constructor&genou=douleur',jours);
 assert.deepEqual(r.bad,['duree','forme']);assert.equal(r.values.knee,'pain');
 assert.deepEqual(parseSettings('',jours),{values:{},bad:[]});
 assert.deepEqual(parseSettings('?jour=lundiii',jours).bad,['jour']);
-console.log('OK : programme, 324 adaptations, durées, repos, blocage douleur et réglages par l’adresse.');
+for(const session of sessions.map(s=>s.id))for(const difficulty of ['easy','normal','hard'])for(const minutes of [20,25,30])for(const energy of ['good','medium','tired'])for(const knee of ['ok','discomfort','pain'])for(const run of ['no','yes']){
+ const p=plan(data,{session,difficulty,minutes,energy,knee,run});
+ if(p.steps.length)assert.equal(p.steps.reduce((n,s)=>n+s.seconds,0),minutes*60);
+ else assert(knee==='pain'||(minutes===20&&session.startsWith('renforcement')&&energy!=='tired'&&knee==='ok'&&run==='no'));
+}
+for(const [difficulty,seconds] of [['easy',30],['normal',35],['hard',40]]){
+ const p=plan(data,{session:'cardio',difficulty,minutes:20,energy:'good',knee:'ok',run:'no'});
+ assert(p.steps.filter(s=>s.phase==='Exercice').every(s=>s.seconds===seconds));
+ assert.equal(p.steps.filter(s=>s.phase==='Exercice').every(s=>s.easier===true),difficulty==='easy');
+ const circuit=plan(data,{session:'renforcement-a',difficulty,minutes:25,energy:'good',knee:'ok',run:'no'});
+ for(const id of data.circuit.exercises){const efforts=circuit.steps.filter(s=>s.id===id&&s.phase==='Exercice');assert.equal(efforts.length,3);assert(efforts.every(s=>s.seconds===data.exercises[id].seconds));}
+}
+assert.deepEqual(parseSettings('?seance=cardio-tronc&difficulte=soutenue',jours).values,{session:'cardio-tronc',difficulty:'hard'});
+assert.deepEqual(parseSettings('?seance=inconnue&difficulte=extreme',jours).bad,['seance','difficulte']);
+assert.throws(()=>plan(data,{session:'inconnue',minutes:25}));
+assert.throws(()=>plan(data,{session:'cardio',difficulty:'extreme',minutes:25}));
+console.log('OK : 810 réglages libres, dimanche autorisé, difficultés 30/35/40 s, durées fixes du circuit, adaptations et anciennes adresses.');
 
 
 // Exact prescribed durations, three rounds, preparation and recovery for each gesture.

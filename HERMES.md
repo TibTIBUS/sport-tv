@@ -10,7 +10,7 @@
 
 ## Lancer une séance par l'adresse
 
-Ouvrir le lecteur avec les réglages du jour dans l'adresse, par exemple `?jour=vendredi&duree=25&forme=bonne&genou=ok&course=non`, plutôt que de remplir le formulaire par clics (voir README.md, « Réglages par l'adresse »). Les valeurs viennent des réponses données le jour même, jamais de la veille. Vérifier à l'écran la ligne « Réglages reçus par l'adresse » avant de cliquer une seule fois sur « Commencer ». Si le bouton reste bloqué (douleur au genou, valeur non reconnue, jour de repos), ne pas forcer : l'expliquer à l'utilisateur.
+Ouvrir le lecteur avec les réglages du jour dans l'adresse, par exemple `?seance=renforcement-a&difficulte=normale&duree=25&forme=bonne&genou=ok&course=non`, plutôt que de remplir le formulaire par clics (voir README.md, « Réglages par l'adresse »). Les valeurs viennent des réponses données le jour même, jamais de la veille. Vérifier à l'écran la ligne « Réglages reçus par l'adresse » avant de cliquer une seule fois sur « Commencer ». Si le bouton reste bloqué (douleur au genou, valeur non reconnue, durée insuffisante pour le circuit), ne pas forcer : l'expliquer à l'utilisateur.
 
 ## Servir le lecteur à domicile
 
@@ -23,4 +23,8 @@ Confirmer l'heure souhaitée et le fuseau Europe/Paris, la destination du lecteu
 
 ## Circuit gainage et chaise
 
-La configuration optionnelle `circuit` dans `data/program.json` définit les trois passages et les durées fixes. Le lecteur l’ajoute uniquement aux séances de renforcement non adaptées. Choisir 25 ou 30 minutes pour ces séances ; 20 minutes affiche un blocage explicite. Les jours doux et l’adaptation après course gardent leur fonctionnement. Les démonstrations peuvent être des vidéos officielles ou des schémas SVG locaux référencés dans `data/demos.json`. Toujours lire le résumé avant de lancer la séance.
+La configuration optionnelle `circuit` dans `data/program.json` définit les trois passages et les durées fixes. Le lecteur l’ajoute uniquement aux séances de renforcement non adaptées. Choisir 25 ou 30 minutes pour ces séances ; 20 minutes affiche un blocage explicite. Les séances douces et l’adaptation après course gardent leur fonctionnement. Les démonstrations peuvent être des vidéos officielles ou des schémas SVG locaux référencés dans `data/demos.json`. Toujours lire le résumé avant de lancer la séance.
+
+## Choix libre de la séance
+
+Le jour de la semaine ne choisit et ne bloque plus la séance. Demander le type de séance et sa difficulté, sans imposer de repos le dimanche. `days` reste un catalogue compatible avec le format historique ; le lecteur utilise le sélecteur `session`, et `intensity` pour la difficulté (le sélecteur `difficulty` reste celui du bilan). Les anciens liens `jour` sont traduits en séance. Les durées du circuit restent fixes.

@@ -7,14 +7,29 @@ export function validate(data){
  }
  return data;
 }
-export function plan(data,{day,minutes,energy,knee,run}){
- if(!Number.isInteger(day)||day<0||day>6||![20,25,30].includes(minutes))throw Error('Choix de séance invalide.');
- const chosen=data.days[day];if(chosen.rest)return{title:chosen.title,steps:[],notice:'Aujourd’hui : repos. Tu peux consulter les autres jours.'};
+export const sessions=[
+ {id:'renforcement-a',day:0,label:'Renforcement A'},
+ {id:'renforcement-b',day:2,label:'Renforcement B'},
+ {id:'cardio',day:1,label:'Cardio sans sauts'},
+ {id:'cardio-tronc',day:3,label:'Cardio et tronc'},
+ {id:'recuperation',day:5,label:'Récupération active'}
+];
+// Keep old bookmarked links usable, including Sunday, without a calendar restriction.
+export const sessionFromDay=day=>sessions.find(s=>s.day===day)?.id||'renforcement-a';
+export function plan(data,{session,day,minutes,difficulty='normal',energy,knee,run}){
+ if(session===undefined){if(!Number.isInteger(day)||day<0||day>6)throw Error('Choix de séance invalide.');session=sessionFromDay(day);}
+ const selected=sessions.find(s=>s.id===session);
+ if(!selected||![20,25,30].includes(minutes)||!['easy','normal','hard'].includes(difficulty))throw Error('Choix de séance invalide.');
+ const chosen=data.days[selected.day];
  if(knee==='pain')return{title:chosen.title,steps:[],notice:'Douleur signalée : séance suspendue. Ne force pas et demande conseil si elle persiste.'};
  const gentle=knee!=='ok'||energy==='tired';
  const ids=gentle?data.gentle:(run==='yes'&&chosen.strength?data.afterRun:chosen.exercises);
  const title=gentle?'Mobilité douce':run==='yes'&&chosen.strength?'Après la course : haut du corps et tronc':chosen.title;
- const steps=[];const add=(id,seconds,phase)=>steps.push({...data.exercises[id],id,seconds,phase});
+ const work=gentle||energy==='medium'?30:({easy:30,normal:35,hard:40}[difficulty]);
+ const steps=[];const add=(id,seconds,phase)=>{
+  const e=data.exercises[id],easier=difficulty==='easy'&&(phase==='Exercice'||phase==='Préparation');
+  steps.push({...e,id,seconds,phase,...(easier?{easier:true,cue:e.easy,target:'Variante facile · À ton rythme'}:{})});
+ };
  const circuit=!gentle&&run!=='yes'&&chosen.strength?data.circuit:null;
  if(circuit){
   const circuitSeconds=circuit.rounds*circuit.exercises.reduce((total,id)=>total+data.exercises[id].seconds+circuit.prepareSeconds+circuit.restSeconds,0);
@@ -27,7 +42,7 @@ export function plan(data,{day,minutes,energy,knee,run}){
   for(let round=1;round<=circuit.rounds;round++){
    const count=Math.floor(extras*round/circuit.rounds)-Math.floor(extras*(round-1)/circuit.rounds);
    for(let n=0;n<count;n++){
-    const id=ids[extraIndex++%ids.length],work=energy==='medium'?30:40;
+    const id=ids[extraIndex++%ids.length];
     add(id,10,'Préparation');add(id,work,'Exercice');add('rest',50-work,'Récupération');
    }
    for(const id of circuit.exercises){
@@ -41,8 +56,7 @@ export function plan(data,{day,minutes,energy,knee,run}){
   return{title,steps,circuitRounds:circuit.rounds,notice:'3 passages de gainage et chaise · 10 s pour te placer, puis 15 s de repos entre les exercices. Pauses supplémentaires possibles à tout moment.'};
  }
  add('warm',240,'Échauffement');
- // Un cycle de 60 s : 10 s de préparation, 30/40 s de mouvement, 20/10 s de repos.
- const work=gentle||energy==='medium'?30:40;
+ // One 60 s cycle: 10 s preparation, chosen effort, remaining time for recovery.
  for(let n=0;n<minutes-7;n++){const id=ids[n%ids.length];add(id,10,'Préparation');add(id,work,'Exercice');add('rest',50-work,'Récupération');}
  add('cool',180,'Retour au calme');
  return{title,steps,notice:gentle?'Séance allégée. Tout mouvement doit rester confortable.':'Garde des mouvements contrôlés et termine chaque série avant de perdre la bonne technique.'};

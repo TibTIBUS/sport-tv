@@ -6,7 +6,7 @@ Lecteur de séances du matin, en HTML/CSS/JavaScript, sans dépendance et sans c
 
 Depuis ce dossier : `python3 -m http.server 8080`. Ouvrir `http://localhost:8080` dans le navigateur. Ne pas ouvrir index.html directement : le programme est chargé par HTTP.
 
-Choisir un jour, 20/25/30 minutes, la forme, l'état du genou et une éventuelle course dans les dernières 24 heures. La durée inclut 4 minutes d'échauffement et 3 minutes de retour au calme. Les étapes centrales contiennent préparation, effort et récupération. Les répétitions sont une cible facultative : arrêter le mouvement avant la fin du créneau si la technique se dégrade. Les haltères ne sont pas obligatoires sur chaque exercice.
+Choisir une séance, 20/25/30 minutes, une difficulté (Facile, Normale, Soutenue), la forme, l'état du genou et une éventuelle course dans les dernières 24 heures. La durée inclut 4 minutes d'échauffement et 3 minutes de retour au calme. Les étapes centrales contiennent préparation, effort et récupération. Les répétitions sont une cible facultative : arrêter le mouvement avant la fin du créneau si la technique se dégrade. Les haltères ne sont pas obligatoires sur chaque exercice.
 
 Commandes : pause/reprendre, passer, variante facile, arrêter, plein écran. Les sons sont activés au clic de démarrage si le navigateur le permet. Après une interruption de plus de 5 secondes, la lecture se met en pause plutôt que de sauter des exercices.
 
@@ -14,17 +14,19 @@ Commandes : pause/reprendre, passer, variante facile, arrêter, plein écran. Le
 
 Le lecteur peut s'ouvrir déjà réglé, avec des paramètres dans l'adresse :
 
-`https://tibtibus.github.io/sport-tv/?jour=vendredi&duree=25&forme=bonne&genou=ok&course=non`
+`https://tibtibus.github.io/sport-tv/?seance=renforcement-a&difficulte=normale&duree=25&forme=bonne&genou=ok&course=non`
 
 | Paramètre | Valeurs acceptées |
 |---|---|
-| `jour` | lundi, mardi, mercredi, jeudi, vendredi, samedi, dimanche (majuscules et accents ignorés) |
+| `seance` | renforcement-a, renforcement-b, cardio, cardio-tronc, recuperation |
+| `difficulte` | facile, normale, soutenue |
+| `jour` (ancien lien) | compatible ; traduit en séance, dimanche ouvre Renforcement A |
 | `duree` | 20, 25 ou 30 |
 | `forme` | bonne, moyenne, fatigue |
 | `genou` | ok, gene, douleur |
 | `course` | oui, non |
 
-- Un paramètre absent garde la valeur par défaut (le jour courant pour `jour`). Les réglages d'une séance précédente ne sont pas repris : ils viennent de l'adresse ou des valeurs par défaut.
+- Un paramètre absent garde la valeur par défaut (Renforcement A et difficulté Normale). Le jour courant ne choisit jamais la séance. Les réglages d'une séance précédente ne sont pas repris : ils viennent de l'adresse ou des valeurs par défaut.
 - Les règles de sécurité sont inchangées : genou « douleur » bloque le démarrage, gêne ou fatigue donnent la séance douce, une course récente donne la séance haut du corps.
 - Une valeur non reconnue affiche une erreur et bloque le démarrage jusqu'à correction.
 - La ligne « Réglages reçus par l'adresse » affiche à l'écran les réglages réellement appliqués, pour les vérifier.
@@ -36,7 +38,7 @@ Lire AGENTS.md et HERMES.md. Hermès modifie `data/program.json` pour préparer 
 
 ## Vérifier
 
-`node scripts/check.mjs` : validité du programme, durée exacte, adaptations, gestion du repos/douleur et lecture des réglages par l'adresse.
+`node scripts/check.mjs` : validité du programme, durée exacte, adaptations, gestion de la douleur et lecture des réglages par l'adresse.
 
 ## Suite prévue
 
@@ -95,15 +97,15 @@ Sur écran tactile, un glissement horizontal sur le texte ou une zone libre du c
 
 ## Accueil compact
 
-Sur ordinateur ou télévision en paysage (au moins 900 × 600 pixels), l’accueil répartit les cinq réglages en haut, la séance et les démonstrations côte à côte, et les exercices dans un bandeau inférieur. La liste des exercices est directement visible. Les réglages et les identifiants des commandes utilisés par Hermès sont conservés. Les écrans étroits gardent un défilement vertical pour conserver la lisibilité.
+Sur ordinateur ou télévision en paysage (au moins 900 × 600 pixels), l’accueil répartit les réglages en haut, la séance et les démonstrations côte à côte, et les exercices dans un bandeau inférieur. La liste des exercices est directement visible. Les réglages et les identifiants des commandes utilisés par Hermès sont conservés. Les écrans étroits gardent un défilement vertical pour conserver la lisibilité.
 
 
 
 ## Circuit gainage et chaise
 
-Les jours de renforcement (lundi, mercredi, vendredi), en forme bonne ou moyenne, sans gêne ni course signalée, intègrent trois passages du circuit : gainage face au sol sur les coudes 45 s, côté gauche 30 s, côté droit 30 s, gainage dynamique sur les coudes 45 s, chaise au mur 45 s. Chaque exercice est précédé de 10 s de préparation et suivi de 15 s de récupération. Les autres exercices occupent le temps restant, répartis entre les passages.
+Les séances Renforcement A et B, choisies librement quel que soit le jour, en forme bonne ou moyenne, sans gêne ni course signalée, intègrent trois passages du circuit : gainage face au sol sur les coudes 45 s, côté gauche 30 s, côté droit 30 s, gainage dynamique sur les coudes 45 s, chaise au mur 45 s. Chaque exercice est précédé de 10 s de préparation et suivi de 15 s de récupération. Les autres exercices occupent le temps restant, répartis entre les passages.
 
-Le circuit seul représente 9 min 45 s d’effort et 16 minutes avec préparation et repos. Avec les 7 minutes d’échauffement/retour au calme, il nécessite plus de 20 minutes : choisir 25 ou 30 minutes. Le mode 20 minutes bloque explicitement le démarrage de ce circuit et invite à choisir une durée suffisante ; aucune durée n’est allongée en silence. Les jours doux, repos, douleur et adaptations après course sont conservés, sans ajout automatique du circuit. Les réglages de bonne/moyenne forme ne raccourcissent pas les durées propres du circuit. Le bouton Plus facile, Pause et Passer restent disponibles.
+Le circuit seul représente 9 min 45 s d’effort et 16 minutes avec préparation et repos. Avec les 7 minutes d’échauffement/retour au calme, il nécessite plus de 20 minutes : choisir 25 ou 30 minutes. Le mode 20 minutes bloque explicitement le démarrage de ce circuit et invite à choisir une durée suffisante ; aucune durée n’est allongée en silence. Les séances douces, le blocage en cas de douleur et les adaptations après course sont conservés, sans ajout automatique du circuit. Les réglages de bonne/moyenne forme ne raccourcissent pas les durées propres du circuit. Le bouton Plus facile, Pause et Passer restent disponibles.
 
 Les passages et le côté d’appui sont affichés pendant les exercices. Avant le départ, chaque mouvement du circuit affiche sa durée et ses trois répétitions. Les maintiens statiques disposent d’une consigne spécifique de maintien, plutôt que de répétitions.
 
@@ -129,3 +131,10 @@ Sur une télévision, ouvrir `https://tibtibus.github.io/sport-tv/?tv=1` pour fo
 - Pendant la séance, les flèches naviguent entre les boutons ; seul OK sur « Passer » passe un exercice.
 
 Les menus TV remplacent uniquement l’affichage des listes : les valeurs, adaptations et blocages du lecteur restent gérés par les réglages existants. La télécommande doit transmettre les touches au site (certains navigateurs ont un mode pointeur à désactiver). Vérifier le comportement réel dans le navigateur installé sur la télévision ; aucune commande à distance ou connexion à la TV n’est ajoutée.
+
+
+## Séances libres et difficulté
+
+Aucun jour n’est affiché ou utilisé pour imposer une séance ou un repos. Le choix « Séance » propose Renforcement A, Renforcement B, Cardio sans sauts, Cardio et tronc et Récupération active. Le format historique `days` du programme reste inchangé pour les agents, mais sert uniquement de catalogue ; le calendrier ne limite plus le lecteur.
+
+Pour les exercices courants, un cycle garde 10 s de préparation et dure 60 s : Facile = 30 s d’effort / 20 s de repos (avec consignes de variante facile), Normale = 35 s / 15 s, Soutenue = 40 s / 10 s. La forme moyenne limite l’effort à 30 s ; fatigue ou gêne conservent la séance douce de 30 s. Les trois passages du circuit gardent toujours 45/30/30/45/45 s d’effort et 15 s de repos, quelle que soit la difficulté. La durée totale choisie reste exacte. Les démonstrations de référence sont retirées lorsque la variante facile est affichée, comme pour le bouton « Plus facile ».
