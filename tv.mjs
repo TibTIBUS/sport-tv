@@ -60,7 +60,7 @@ export function initTV(doc, {storage, search = globalThis.location?.search || ''
  }
  function focusView(id) {
   if (!enabled) return;
-  const preferred = id === 'player' ? 'pause' : id === 'finish' ? 'tv-difficulty' : 'tv-day';
+  const preferred = id === 'player' ? 'pause' : id === 'finish' ? 'tv-difficulty' : 'tv-session';
   focus(doc.getElementById(preferred));
  }
  function apply(value, persist = false) {

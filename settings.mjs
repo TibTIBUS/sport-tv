@@ -4,7 +4,9 @@ const MAPS={
  duree:['minutes',{20:20,25:25,30:30}],
  forme:['energy',{bonne:'good',good:'good',moyenne:'medium',medium:'medium',fatigue:'tired',tired:'tired'}],
  genou:['knee',{ok:'ok',gene:'discomfort',discomfort:'discomfort',douleur:'pain',pain:'pain'}],
- course:['run',{oui:'yes',yes:'yes',non:'no',no:'no'}]
+ course:['run',{oui:'yes',yes:'yes',non:'no',no:'no'}],
+ seance:['session',{'renforcement-a':'renforcement-a','renforcement-b':'renforcement-b',cardio:'cardio','cardio-tronc':'cardio-tronc',recuperation:'recuperation'}],
+ difficulte:['difficulty',{facile:'easy',easy:'easy',normale:'normal',normal:'normal',soutenue:'hard',hard:'hard'}]
 };
 export function parseSettings(search,dayNames){
  const q=new URLSearchParams(search),values={},bad=[];
