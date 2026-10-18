@@ -14,42 +14,5 @@
  <p id="motivation" class="motivation" hidden></p>
  <div class="session-footer"><p id="next"></p><div class="actions"><button class="primary" id="pause">Pause</button><button id="skip">Passer</button><button id="easy">Plus facile</button><button id="stop">Arrêter</button></div></div>
  <p class="session-hint muted"><span class="keyboard-hint">Espace : pause · Flèche droite : passer</span><span class="remote-hint" hidden>Flèches : choisir une commande · OK : activer</span> · Arrête si une douleur apparaît.</p>
-</section><section id="finish" hidden><p class="eyebrow">BILAN</p><h1 id="result"></h1><label>Difficulté<select id="difficulty"><option>Adaptée</option><option>Trop facile</option><option>Trop difficile</option></select></label><label>Genou pendant la séance<select id="feedback-knee"><option>Rien à signaler</option><option>Gêne</option><option>Douleur</option></select></label><button id="download" class="primary">Télécharger mon bilan</button><button id="back">Retour au programme</button><p class="muted">Le bilan reste sur cet appareil. Transmets le fichier à Hermès pour adapter les prochaines séances.</p></section><dialog id="demo-dialog" aria-labelledby="dialog-title"><div class="dialog-heading"><h2 id="dialog-title"></h2><button id="close-demo" aria-label="Fermer la démonstration">Fermer</button></div><div id="dialog-video" class="video-frame"></div><p id="dialog-status" class="video-status" role="status"></p><ul id="dialog-points" class="demo-points"></ul><p id="dialog-avoid" class="avoid"></p><p id="dialog-note" class="muted"></p><div class="source-links"><a id="dialog-original" target="_blan…540 tokens truncated…US'},{lang:'fr-FR',localService:true}];
-class Context{
- constructor(){this.currentTime=0;this.destination={};}
- resume(){resumes++;return Promise.resolve();}
- createOscillator(){const note={frequency:{},connect(){},disconnect(){},start(at){this.at=at;notes.push(this);},stop(){this.stopped=true;}};return note;}
- createGain(){return{gain:{setValueAtTime(){},linearRampToValueAtTime(value){if(value>0)this.peak=value;}},connect(){},disconnect(){}};}
-}
-const speech={getVoices:()=>voices,addEventListener(type,fn){this.changed=fn;},cancel(){canceled++;},speak(u){said.push(u);}};
-const view={AudioContext:Context,speechSynthesis:speech,SpeechSynthesisUtterance:class{constructor(text){this.text=text;}}};
-const audio=new WorkoutAudio({view,storage:{getItem:k=>saved.get(k),setItem:(k,v)=>saved.set(k,v)},onChange:()=>updates++});
-assert.equal(audio.mode,'voice');assert.equal(audio.volume,.5);assert.equal(audio.canSpeak,true);
-audio.step({phase:'Échauffement'});assert.equal(notes.length,0);assert.equal(said.length,0,'no autoplay before gesture');
-audio.reset();audio.unlock();audio.step({phase:'Échauffement'});assert.equal(notes.length,2);assert.match(said.at(-1).text,/Échauffement/);assert.equal(said.at(-1).lang,'fr-FR');assert.equal(said.at(-1).voice.localService,true);assert.equal(said.at(-1).volume,.5);
-audio.step({phase:'Préparation',round:1,rounds:3,name:'Gainage sur les coudes'});assert.match(said.at(-1).text,/Premier passage.*Gainage/);
-audio.step({phase:'Préparation',round:1,rounds:3,name:'Gainage côté gauche'});assert(!said.at(-1).text.includes('Premier passage'));
-audio.step({phase:'Préparation',round:2,rounds:3,name:'Gainage sur les coudes'});assert.match(said.at(-1).text,/Deuxième passage/);
-const before=notes.length;
-for(const remaining of [3,2.9,2.8,2,1.9,1,0])audio.tick(4,remaining,{phase:'Exercice'});
-assert.equal(notes.length-before,3,'one beep for each of 3, 2, 1');
-const paused=notes.length;audio.clear();audio.tick(4,1,{phase:'Exercice'});assert.equal(notes.length,paused,'no duplicate countdown after pause');
-audio.tick(5,3,{phase:'Préparation'});assert.equal(notes.length,paused,'no countdown over a recovery/preparation boundary');
-audio.step({phase:'Récupération'});assert.equal(said.at(-1).text,'Repos.');
-audio.complete();assert.match(said.at(-1).text,/Bravo Thibaut/);assert(notes.slice(-3).every(n=>n.frequency.value>0));
-audio.clear();assert.equal(audio.nodes.size,0);
-audio.configure('beep',.25);const voicesBefore=said.length;audio.test();assert.equal(said.length,voicesBefore);assert(resumes>=2);
-audio.configure('mute',1);const mutedNotes=notes.length;audio.test();audio.step({phase:'Exercice'});audio.complete();assert.equal(notes.length,mutedNotes);assert.equal(said.length,voicesBefore);
-audio.configure('voice',0);audio.test();assert.equal(notes.length,mutedNotes);assert.equal(said.length,voicesBefore);
-assert.equal(new WorkoutAudio({view,storage:{getItem:k=>saved.get(k)}}).volume,0,'zero volume persists');
-audio.configure('voice',.75);assert.equal(new WorkoutAudio({view,storage:{getItem:k=>saved.get(k)}}).mode,'voice');
-voices=[];assert.match(audio.status,/bips seuls/);audio.test();assert.equal(said.length,voicesBefore);assert(notes.length>mutedNotes);
-voices=[{lang:'fr-FR',localService:true}];speech.changed();audio.test();assert.equal(said.at(-1).volume,.75);
-said.at(-1).onerror({error:'interrupted'});assert.equal(audio.canSpeak,true);
-said.at(-1).onerror({error:'synthesis-failed'});assert.equal(audio.canSpeak,false);assert.match(audio.status,/bips seuls/);
-const unsupported=new WorkoutAudio({view:{}});unsupported.unlock();unsupported.test();assert.match(unsupported.status,/pas disponible/);
-const denied=new WorkoutAudio({view:{AudioContext:class{constructor(){throw Error('unsupported');}}}});denied.unlock();assert.match(denied.status,/pas disponible/);
-const corrupt=new WorkoutAudio({view,storage:{getItem:()=>'{bad'}});assert.equal(corrupt.volume,.5);
-audio.configure('invalid',-1);assert.equal(audio.volume,.75);
-assert(canceled>0&&updates>0);
-console.log('OK : activation sur geste, voix française, passages, 3/2/1 sans doublon, pause, fin, modes/volume mémorisés, annulation et repli sans voix/audio.');
+</section><section id="finish" hidden><p class="eyebrow">BILAN</p><h1 id="result"></h1><label>Difficulté<select id="difficulty"><option>Adaptée</option><option>Trop facile</option><option>Trop difficile</option></select></label><label>Genou pendant la séance<select id="feedback-knee"><option>Rien à signaler</option><option>Gêne</option><option>Douleur</option></select></label><button id="download" class="primary">Télécharger mon bilan</button><button id="back">Retour au programme</button><p class="muted">Le bilan reste sur cet appareil. Transmets le fichier à Hermès pour adapter les prochaines séances.</p></section><dialog id="demo-dialog" aria-labelledby="dialog-title"><div class="dialog-heading"><h2 id="dialog-title"></h2><button id="close-demo" aria-label="Fermer la démonstration">Fermer</button></div><div id="dialog-video" class="video-frame"></div><p id="dialog-status" class="video-status" role="status"></p><ul id="dialog-points" class="demo-points"></ul><p id="dialog-avoid" class="avoid"></p><p id="dialog-note" class="muted"></p><div class="source-links"><a id="dialog-original" target="_blank" rel="noopener noreferrer">Vidéo originale</a><a id="dialog-source" target="_blank" rel="noopener noreferrer"></a></div><p class="muted">Observe le geste sans chercher à suivre la vitesse du modèle. Arrête tout mouvement douloureux.</p></dialog><div id="sound-dialog" class="sound-overlay" hidden><section class="sound-card" role="dialog" aria-modal="true" aria-labelledby="sound-title"><div class="dialog-heading"><h2 id="sound-title">Sons de la séance</h2><button id="close-sound" type="button">Fermer</button></div><div class="sound-fields"><label>Mode sonore<select id="sound-mode"><option value="mute">Muet</option><option value="beep">Bips seuls</option><option value="voice" selected>Bips + voix</option></select></label><label>Volume<select id="sound-volume"><option value="0">0 %</option><option value="25">25 %</option><option value="50" selected>50 %</option><option value="75">75 %</option><option value="100">100 %</option></select></label></div><p id="sound-status" role="status"></p><button id="test-sound" type="button" class="primary">Tester le son</button><p class="muted">Choix mémorisés sur cet appareil. Les sons démarrent avec « Commencer » ou « Tester ». Une séance en cours reste en pause après les réglages.</p></section></div><div id="tv-options" class="tv-overlay" hidden><section class="tv-options-card" role="dialog" aria-modal="true" aria-labelledby="tv-options-title"><h2 id="tv-options-title">Choisir</h2><p class="muted">Flèches pour choisir · OK pour valider</p><div id="tv-option-list"></div><button id="tv-options-close" type="button">Annuler</button></section></div><p id="error" role="alert"></p></main><script type="module" src="app.js?v=audio-1"></script></body></html>
+
