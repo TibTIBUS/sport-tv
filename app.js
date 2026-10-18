@@ -1,7 +1,7 @@
 import {validate,plan,sessions,sessionFromDay} from './planner.mjs?v=free-1';
-import {initTV} from './tv.mjs?v=free-1';
+import {initTV} from './tv.mjs?v=tv-landscape-1';
 import {parseSettings} from './settings.mjs?v=free-1';
-import {initTheme} from './theme.mjs?v=themes-2';
+import {initTheme} from './theme.mjs?v=tv-landscape-1';
 import {DemoPlayer,validateDemos,videoUrl,demoVideos} from './media.mjs?v=core-1';
 const $=id=>document.getElementById(id);let data,current,steps=[],index=0,remaining=0,deadline=0,running=false,active=false,elapsed=0,last=0,audio,started,completed=false;
 let tv;

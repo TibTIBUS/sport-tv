@@ -13,6 +13,17 @@ export function initTV(doc, {storage, search = globalThis.location?.search || ''
  const panel = doc.getElementById('tv-options'), options = doc.getElementById('tv-option-list');
  const title = doc.getElementById('tv-options-title'), hint = doc.getElementById('tv-help');
  let enabled = false, editing = null, saved;
+ const view = doc.defaultView;
+ function sizeViewport() {
+  if (!enabled) return;
+  const height = Math.floor(view?.visualViewport?.height || view?.innerHeight || 0);
+  if (height > 0) {
+   root.style.setProperty('--tv-height', height + 'px');
+   root.style.setProperty('--tv-vh', height / 100 + 'px');
+  }
+ }
+ view?.addEventListener('resize', sizeViewport);
+ view?.visualViewport?.addEventListener('resize', sizeViewport);
  try { saved = storage?.getItem(storageKey); } catch {}
  const forced = new URLSearchParams(search).get('tv');
  const initial = forced === '1' || (forced !== '0' && (saved === 'on' || (saved !== 'off' && detectTV(userAgent))));
@@ -65,6 +76,8 @@ export function initTV(doc, {storage, search = globalThis.location?.search || ''
  }
  function apply(value, persist = false) {
   close(); enabled = value; root.classList.toggle('tv-mode', value);
+  sizeViewport();
+  doc.dispatchEvent(new Event('sport-tv-layout-change'));
   toggle.setAttribute('aria-pressed', String(value)); toggle.textContent = value ? 'Mode TV : actif' : 'Mode TV';
   hint.hidden = !value;
   doc.querySelector('.keyboard-hint').hidden = value; doc.querySelector('.remote-hint').hidden = !value;
