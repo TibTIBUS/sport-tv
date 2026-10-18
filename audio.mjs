@@ -31,12 +31,15 @@ export class WorkoutAudio {
  unlock(){
   this.unlocked=true;
   if(this.mode==='mute'||this.volume===0)return;
-  if(!this.canBeep)return;
+  this.voiceFailed=false;
+  const Context=this.view.AudioContext||this.view.webkitAudioContext;
+  if(!Context){this.onChange();return;}
+  this.audioFailed=false;
   try{
-   const Context=this.view.AudioContext||this.view.webkitAudioContext;
-   this.context??=new Context();
+   if(!this.context||this.context.state==='closed')this.context=new Context();
    const resumed=this.context.resume();
    resumed?.catch?.(()=>{this.audioFailed=true;this.onChange();});
+   this.onChange();
   }catch{this.audioFailed=true;this.onChange();}
  }
  clearSpeech(){try{this.view.speechSynthesis?.cancel();}catch{}}
