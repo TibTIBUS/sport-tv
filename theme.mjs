@@ -1,6 +1,14 @@
 const storageKey='sport-tv-theme';
 export function initTheme(root,button,surface,storage){
  let theme='dark',touch;
+ const arrange=()=>{
+  const page=root.ownerDocument,timer=page.querySelector('.timer-card'),heading=page.querySelector('.session-heading'),footer=page.querySelector('.session-footer');
+  if(timer&&heading&&footer){
+   const target=page.getElementById('target'),motivation=page.getElementById('motivation');
+   if(theme==='light'&&!root.classList.contains?.('tv-mode')){timer.append(target,motivation);}else{heading.append(target);footer.before(motivation);}
+  }
+ };
+ root.ownerDocument.addEventListener('sport-tv-layout-change',arrange);
  try{const saved=storage?.getItem(storageKey);if(saved==='light')theme=saved;}catch{}
  const apply=value=>{
   theme=value;root.dataset.theme=theme;
@@ -8,11 +16,7 @@ export function initTheme(root,button,surface,storage){
   button.setAttribute('aria-label',theme==='dark'?'Passer au thème clair':'Passer au thème sombre');
   button.title=theme==='dark'?'Thème 2 · Clair':'Thème 1 · Sombre';
   button.querySelector('.theme-label').textContent=theme==='dark'?'Clair':'Sombre';
-  const page=root.ownerDocument,timer=page.querySelector('.timer-card'),heading=page.querySelector('.session-heading'),footer=page.querySelector('.session-footer');
-  if(timer&&heading&&footer){
-   const target=page.getElementById('target'),motivation=page.getElementById('motivation');
-   if(theme==='light'){timer.append(target,motivation);}else{heading.append(target);footer.before(motivation);}
-  }
+  arrange();
   try{storage?.setItem(storageKey,theme);}catch{}
  };
  apply(theme);

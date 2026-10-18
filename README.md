@@ -138,3 +138,12 @@ Les menus TV remplacent uniquement l’affichage des listes : les valeurs, adapt
 Aucun jour n’est affiché ou utilisé pour imposer une séance ou un repos. Le choix « Séance » propose Renforcement A, Renforcement B, Cardio sans sauts, Cardio et tronc et Récupération active. Le format historique `days` du programme reste inchangé pour les agents, mais sert uniquement de catalogue ; le calendrier ne limite plus le lecteur.
 
 Pour les exercices courants, un cycle garde 10 s de préparation et dure 60 s : Facile = 30 s d’effort / 20 s de repos (avec consignes de variante facile), Normale = 35 s / 15 s, Soutenue = 40 s / 10 s. La forme moyenne limite l’effort à 30 s ; fatigue ou gêne conservent la séance douce de 30 s. Les trois passages du circuit gardent toujours 45/30/30/45/45 s d’effort et 15 s de repos, quelle que soit la difficulté. La durée totale choisie reste exacte. Les démonstrations de référence sont retirées lorsque la variante facile est affichée, comme pour le bouton « Plus facile ».
+
+
+## Mode TV paysage — Équilibre
+
+Le mode TV en paysage utilise une feuille dédiée `tv-layout.css`, y compris sur les navigateurs dont la hauteur CSS est inférieure à 600 px. La hauteur disponible est actualisée lors du redimensionnement et des changements de barre du navigateur. La vidéo ou le schéma reste à gauche, le minuteur et la consigne principale à droite, et les quatre commandes en bas. L’accueil garde aussi ses réglages en ligne.
+
+Les thèmes clair et sombre gardent cette même répartition en mode TV. Hors mode TV, le thème clair retrouve sa répartition sur ordinateur. Les liens de source et les explications complémentaires restent dans l’aperçu « Apprendre les gestes » ; pendant la séance TV, la consigne principale est affichée sans répéter toute la fiche du tutoriel. Le cadre vidéo n’ouvre pas le plein écran du média. Les paramètres des lecteurs intégrés sont conservés.
+
+Utiliser `?tv=1` ou le bouton Mode TV si le navigateur de la télévision ne s’identifie pas comme tel. La page ne force pas une rotation physique de l’écran. Recharger le site hors séance après mise à jour.

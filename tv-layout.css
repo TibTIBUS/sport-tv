@@ -1,0 +1,99 @@
+/* Explicit TV landscape layout, including low CSS resolutions such as 640 x 360.
+   The ordinary desktop and phone styles remain in style.css. */
+@media (orientation:landscape) {
+ .tv-mode{--tv-height:100vh;--tv-vh:1vh;--tv-header:clamp(32px,calc(var(--tv-vh)*6),50px);--tv-gap:clamp(4px,calc(var(--tv-vh)*1),10px);--tv-pad:clamp(6px,calc(var(--tv-vh)*1.5),16px);font-size:clamp(11px,calc(var(--tv-vh)*2),18px)}
+ .tv-mode body.home-active,.tv-mode body.session-active{height:var(--tv-height);overflow:hidden}
+ .tv-mode body header{height:var(--tv-header);padding:4px 2vw;gap:12px}
+ .tv-mode header strong{font-size:clamp(13px,calc(var(--tv-vh)*2.7),22px)}
+ .tv-mode header>span{display:none}
+ .tv-mode .header-actions{gap:6px}
+ .tv-mode .header-actions button{font-size:clamp(11px,calc(var(--tv-vh)*1.8),16px);padding:4px 9px;min-height:24px}
+ .tv-mode #theme-toggle svg{width:15px;height:15px}
+ .tv-mode body main{height:calc(var(--tv-height) - var(--tv-header));max-width:none;padding:var(--tv-pad) 2vw}
+ .tv-mode button:focus,.tv-mode a:focus{outline-width:2px;outline-offset:2px;box-shadow:0 0 0 4px var(--bg)}
+ /* One bounded workspace: video left, timer and primary instructions right. */
+ .tv-mode #player{height:100%;display:grid;grid-template-rows:auto auto auto minmax(0,1fr) auto;gap:var(--tv-gap);font-size:inherit;line-height:1.25;min-height:0}
+ .tv-mode #player .session-status{gap:8px;min-height:12px}
+ .tv-mode #player .session-status .eyebrow{font-size:clamp(10px,calc(var(--tv-vh)*1.65),15px);margin:0;letter-spacing:.03em}
+ .tv-mode #player #progress-label{font-size:10px}
+ .tv-mode #player .session-heading{display:flex;gap:12px;min-height:0;margin:0;align-items:center}
+ .tv-mode #player .session-heading h1{font-size:clamp(18px,calc(var(--tv-vh)*3.7),36px);line-height:1.1;margin:0}
+ .tv-mode #player .session-heading #target{margin:0;font-size:clamp(10px,calc(var(--tv-vh)*1.8),17px);max-width:42%;line-height:1.25}
+ .tv-mode #player .stage{display:flex;gap:12px;margin:0;padding:4px 8px;min-height:0}
+ .tv-mode #player .stage strong{font-size:clamp(11px,calc(var(--tv-vh)*2),19px)}
+ .tv-mode #player .stage p{font-size:clamp(10px,calc(var(--tv-vh)*1.75),16px);line-height:1.25;margin:0}
+ .tv-mode #player .work{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);grid-template-rows:minmax(56px,.32fr) minmax(0,.68fr);gap:var(--tv-gap);min-height:0}
+ .tv-mode #player .media-card,.tv-mode #player .rest-panel{grid-column:1;grid-row:1 / 3;min-height:0;min-width:0;padding:var(--tv-gap);border-radius:10px}
+ .tv-mode #player .media-card{display:flex;flex-direction:column;gap:4px}
+ .tv-mode #player .media-card .video-frame{flex:1;min-height:0;aspect-ratio:auto;overflow:hidden}
+ .tv-mode #player .video-frame iframe,.tv-mode #player .exercise-illustration{width:100%;height:100%;max-height:100%;object-fit:contain}
+ .tv-mode #player .video-tools{min-width:0;flex:none}
+ .tv-mode #player .demo-choices{display:flex;gap:4px;margin:0 0 3px;flex-wrap:wrap}
+ .tv-mode #player .demo-choices:empty{display:none}
+ .tv-mode #player .demo-choices button,.tv-mode #player #watch{font-size:clamp(10px,calc(var(--tv-vh)*1.6),14px);padding:3px 6px;line-height:1.2;min-height:22px}
+ .tv-mode #player .video-links{gap:4px}
+ .tv-mode #player .source-links{display:none}
+ .tv-mode #player .video-status{font-size:clamp(10px,calc(var(--tv-vh)*1.5),13px);line-height:1.15;margin:3px 0}
+ .tv-mode #player .video-status:empty{display:none}
+ .tv-mode #player .timer-card{grid-column:2;grid-row:1;display:flex;align-items:center;justify-content:center;min-height:0;padding:4px;background:var(--panel);gap:0;border-radius:10px}
+ .tv-mode #player .clock-face{background:none;border-radius:0;width:auto;max-width:100%;aspect-ratio:auto;display:block}
+ .tv-mode #player .clock-face::before{display:none}
+ .tv-mode #player #clock{font-size:clamp(32px,calc(var(--tv-vh)*8.5),78px);line-height:1;font-weight:750}
+ .tv-mode #player #clock-label{font-size:clamp(10px,calc(var(--tv-vh)*1.6),15px);line-height:1.15;margin:3px 0 0}
+ .tv-mode #player .technique-card{grid-column:2;grid-row:2;display:flex;flex-direction:column;justify-content:center;min-height:0;padding:clamp(7px,calc(var(--tv-vh)*1.8),18px);border-radius:10px}
+ .tv-mode #player .technique-card h2{font-size:clamp(13px,calc(var(--tv-vh)*2.5),25px);margin:0 0 6px}
+ .tv-mode #player #cue{font-size:clamp(11px,calc(var(--tv-vh)*2),20px);line-height:1.35;margin:0}
+ /* Primary cues remain visible; avoid repeating the tutorial transcript. */
+ .tv-mode #player #demo-points,.tv-mode #player #demo-note{display:none}
+ .tv-mode #player #demo-avoid{font-size:clamp(10px,calc(var(--tv-vh)*1.65),16px);line-height:1.25;margin:6px 0 0;padding:4px 7px}
+ .tv-mode #player #motivation,.tv-mode #player .session-hint{display:none}
+ .tv-mode #player .session-footer{display:flex;flex-wrap:nowrap;gap:10px;margin:0;padding:6px 8px;min-height:0}
+ .tv-mode #player #next{font-size:clamp(10px,calc(var(--tv-vh)*1.8),17px);line-height:1.2;min-width:0}
+ .tv-mode #player .actions{display:flex;width:auto;flex-shrink:0;gap:6px;flex-wrap:nowrap}
+ .tv-mode #player .actions button{font-size:clamp(11px,calc(var(--tv-vh)*1.9),18px);padding:5px 10px;min-height:27px;flex:none}
+ .tv-mode #player .rest-panel{display:flex;justify-content:center;gap:6px}
+ .tv-mode #player .rest-orb{width:clamp(60px,calc(var(--tv-vh)*16),180px);margin:0 auto}
+ .tv-mode #player .rest-panel h2{font-size:clamp(16px,calc(var(--tv-vh)*3),30px)}
+ .tv-mode #player .rest-panel p{font-size:clamp(11px,calc(var(--tv-vh)*1.9),18px)}
+ .tv-mode #player .rest-panel .eyebrow,.tv-mode #player .rest-panel .muted{display:none}
+ /* The start screen also stays horizontal, rather than using phone breakpoints. */
+ .tv-mode #setup{height:100%;display:grid;grid-template-rows:auto auto auto minmax(0,1fr) auto;gap:var(--tv-gap);font-size:inherit;min-height:0}
+ .tv-mode #setup .home-heading{display:flex;align-items:center;min-height:0}
+ .tv-mode #setup .home-heading h1{font-size:clamp(18px,calc(var(--tv-vh)*3.4),32px);margin:0}
+ .tv-mode #setup .home-heading .eyebrow,.tv-mode #setup .home-heading>.muted{display:none}
+ .tv-mode #setup #tv-help{font-size:clamp(10px,calc(var(--tv-vh)*1.6),15px);line-height:1.2;margin:0}
+ .tv-mode #setup .settings{display:grid;grid-template-columns:minmax(0,1.5fr) repeat(5,minmax(0,1fr));gap:8px;margin:0;padding:7px 9px;background:var(--panel);border:1px solid var(--border);border-radius:10px}
+ .tv-mode #setup .settings label{font-size:clamp(10px,calc(var(--tv-vh)*1.7),16px);line-height:1.2;display:flex;flex-direction:column;justify-content:space-between;min-width:0;gap:4px}
+ .tv-mode #setup .tv-setting{font-size:clamp(10px,calc(var(--tv-vh)*1.8),17px);padding:5px;min-height:27px;margin:0;white-space:normal;line-height:1.15;border-radius:6px}
+ .tv-mode #setup .home-content{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:var(--tv-gap);min-height:0}
+ .tv-mode #setup .session-card,.tv-mode #setup .demo-library{padding:clamp(8px,calc(var(--tv-vh)*1.6),17px);display:flex;flex-direction:column;justify-content:center;min-height:0;border-radius:10px}
+ .tv-mode #setup .session-card .eyebrow{display:none}
+ .tv-mode #setup .session-card #title{font-size:clamp(16px,calc(var(--tv-vh)*2.8),28px);line-height:1.15;margin:0 0 4px}
+ .tv-mode #setup .session-card #summary,.tv-mode #setup .session-card #notice,.tv-mode #setup .session-card #applied{font-size:clamp(10px,calc(var(--tv-vh)*1.7),16px);line-height:1.25;margin:3px 0}
+ .tv-mode #setup .session-card #start{font-size:clamp(12px,calc(var(--tv-vh)*2),19px);padding:6px;margin-top:6px;min-height:27px}
+ .tv-mode #setup .demo-library h2{font-size:clamp(14px,calc(var(--tv-vh)*2.4),24px);margin:0 0 6px}
+ .tv-mode #setup .demo-library>.muted{display:none}
+ .tv-mode #setup .demo-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;min-height:0;overflow:auto;max-height:100%;padding:3px}
+ .tv-mode #setup .demo-list button{font-size:clamp(10px,calc(var(--tv-vh)*1.6),15px);line-height:1.15;padding:4px 5px;min-height:24px}
+ .tv-mode #setup .home-preview{display:flex;align-items:center;margin:0;padding:5px 8px;gap:8px;border-radius:8px}
+ .tv-mode #setup .home-preview h2{font-size:clamp(10px,calc(var(--tv-vh)*1.6),15px);margin:0}
+ .tv-mode #setup .home-preview ol{display:flex;flex-wrap:wrap;gap:3px}
+ .tv-mode #setup .home-preview li{font-size:clamp(9px,calc(var(--tv-vh)*1.45),14px);line-height:1.2;padding:2px 4px}
+ .tv-mode body #error:not(:empty){position:fixed;bottom:6px;top:auto;left:2vw;right:2vw;padding:6px;background:var(--warn-bg);border:1px solid var(--warn);border-radius:6px;font-size:12px;z-index:5}
+ .tv-mode #demo-dialog{max-height:90vh;padding:12px}
+ .tv-mode #demo-dialog .video-frame{max-height:55vh}
+ .tv-mode .tv-options-card{width:min(480px,90vw);max-height:90vh;padding:14px}
+ .tv-mode .tv-options-card h2{font-size:20px}
+ .tv-mode .tv-options-card>p{font-size:13px;margin:6px 0 10px}
+ .tv-mode #tv-option-list{gap:6px;margin:8px 5px 12px}
+ .tv-mode #tv-option-list button{font-size:14px;min-height:30px;padding:6px 12px}
+ .tv-mode #tv-options-close{font-size:13px;padding:6px 10px}
+}
+@media (orientation:landscape) and (max-height:450px){
+ .tv-mode #player #demo-guidance{display:none}
+ .tv-mode #player .stage p{display:none}
+ .tv-mode #player .session-heading #target{max-width:40%;font-size:10px}
+ .tv-mode #player .video-status{font-size:9px}
+ .tv-mode #player .rest-panel p{font-size:10px}
+ .tv-mode #player .actions button{padding:5px 7px}
+}
