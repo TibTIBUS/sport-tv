@@ -117,3 +117,15 @@ Les passages et le côté d’appui sont affichés pendant les exercices. Avant 
 Sources consultées le 18 octobre 2026. Les SVG sont des rappels simplifiés du geste, pas une validation individuelle de posture. Aucune image générée ni fichier vidéo tiers n’est réhébergé. Le lecteur conserve les paramètres de lecture intégrée, les liens de source et le fonctionnement YouTube Premium existants. La lecture réelle des nouveaux clips sur la télévision reste à vérifier.
 
 Vérification du lecteur : `node scripts/player-check.mjs` teste les commandes et les durées avec un DOM et des lecteurs vidéo simulés ; ce contrôle ne remplace pas la vérification visuelle sur télévision.
+
+
+## Navigation à la télécommande
+
+Sur une télévision, ouvrir `https://tibtibus.github.io/sport-tv/?tv=1` pour forcer le mode TV. Le bouton « Mode TV » permet aussi de l’activer ou le désactiver ; ce choix est conservé sur cet appareil si le navigateur autorise le stockage local. `?tv=0` force le mode classique. Les navigateurs identifiables comme Smart TV, Android TV, Tizen ou webOS activent le mode automatiquement, mais certains se présentent comme Chrome : la détection n’est donc pas garantie, et la taille de l’écran seule n’est pas utilisée.
+
+- Flèches : déplacer la sélection visible entre les commandes.
+- OK : ouvrir un réglage, puis valider l’option choisie avec les flèches.
+- Retour / Échap : fermer le choix sans modifier la valeur, ou fermer une démonstration. Hors de ces fenêtres, Retour conserve son rôle dans le navigateur.
+- Pendant la séance, les flèches naviguent entre les boutons ; seul OK sur « Passer » passe un exercice.
+
+Les menus TV remplacent uniquement l’affichage des listes : les valeurs, adaptations et blocages du lecteur restent gérés par les réglages existants. La télécommande doit transmettre les touches au site (certains navigateurs ont un mode pointeur à désactiver). Vérifier le comportement réel dans le navigateur installé sur la télévision ; aucune commande à distance ou connexion à la TV n’est ajoutée.

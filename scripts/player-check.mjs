@@ -23,7 +23,7 @@ const program=JSON.parse(readFileSync(new URL('../data/program.json',import.meta
 const demos=JSON.parse(readFileSync(new URL('../data/demos.json',import.meta.url),'utf8'));
 let interval,now=0;
 class QuietPlayer{stop(){} playback(){} load(d){this.reference=d;}}
-const context={document,validate,plan,parseSettings,initTheme,DemoPlayer:QuietPlayer,validateDemos,videoUrl,demoVideos,location:{search:'?jour=lundi&duree=25&forme=bonne&genou=ok&course=non'},localStorage:{getItem(){},setItem(){}},fetch:async url=>({ok:true,json:async()=>url.includes('program')?program:demos}),performance:{now:()=>now},setInterval:fn=>interval=fn,setTimeout(){},console,assert,URL,Blob,Date};
+const context={initTV:()=>({enabled:false,focusView(){}}),document,validate,plan,parseSettings,initTheme,DemoPlayer:QuietPlayer,validateDemos,videoUrl,demoVideos,location:{search:'?jour=lundi&duree=25&forme=bonne&genou=ok&course=non'},localStorage:{getItem(){},setItem(){}},fetch:async url=>({ok:true,json:async()=>url.includes('program')?program:demos}),performance:{now:()=>now},setInterval:fn=>interval=fn,setTimeout(){},console,assert,URL,Blob,Date};
 let source=readFileSync(new URL('../app.js',import.meta.url),'utf8').replace(/^import .*;\n/gm,'');
 source+=String.raw`
 assert.equal($('start').disabled,false);
