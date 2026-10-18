@@ -147,3 +147,16 @@ Le mode TV en paysage utilise une feuille dédiée `tv-layout.css`, y compris su
 Les thèmes clair et sombre gardent cette même répartition en mode TV. Hors mode TV, le thème clair retrouve sa répartition sur ordinateur. Les liens de source et les explications complémentaires restent dans l’aperçu « Apprendre les gestes » ; pendant la séance TV, la consigne principale est affichée sans répéter toute la fiche du tutoriel. Le cadre vidéo n’ouvre pas le plein écran du média. Les paramètres des lecteurs intégrés sont conservés.
 
 Utiliser `?tv=1` ou le bouton Mode TV si le navigateur de la télévision ne s’identifie pas comme tel. La page ne force pas une rotation physique de l’écran. Recharger le site hors séance après mise à jour.
+
+
+## Sons et annonces vocales
+
+Le bouton « Son » de l’en-tête ouvre les réglages accessibles à la télécommande : Muet, Bips seuls, Bips + voix, et volume de 0 à 100 % par pas de 25 %. Le choix est conservé localement sur l’appareil. Par défaut : Bips + voix, volume 50 %. « Tester le son » permet de vérifier avant de commencer. Le son est activé uniquement après un geste sur Commencer, Reprendre ou Tester.
+
+Trois bips distincts sont joués aux trois dernières secondes de préparation avant l’effort ; les signaux de départ et de récupération sont différents. Les annonces françaises restent courtes : préparation du mouvement, départ de l’effort, repos, nouveau passage, retour au calme et fin. Les durées du programme restent inchangées.
+
+Les bips sont synthétisés avec Web Audio, sans fichier sonore tiers ni abonnement. La voix utilise la synthèse du navigateur, en privilégiant une voix française locale. Sans voix française, l’application conserve les bips et le signale dans les réglages. Si Web Audio est aussi indisponible, les consignes visuelles restent fonctionnelles. La disponibilité et le rendu audio doivent être essayés sur le navigateur de la TV réelle ; les contrôles automatisés ne constituent pas une écoute physique.
+
+Pause, Arrêter, fermeture du test sonore et changement de réglage coupent les sons en cours. Ouvrir les réglages pendant une séance la met en pause ; la reprise reste manuelle. Quitter l’onglet met également la séance en pause. Il n’y a pas d’annonce relancée par un changement de thème, ni de rattrapage d’anciens bips.
+
+Vérification : `node scripts/audio-check.mjs` et `node scripts/player-check.mjs`.

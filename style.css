@@ -105,3 +105,10 @@ dialog{max-width:950px;width:calc(100% - 2rem);max-height:90vh;overflow:auto;bac
  #setup .home-preview ol{flex-wrap:wrap;gap:5px}
  #setup .home-preview li{font-size:clamp(11px,1.3vh,15px)}
 }
+/* Audio preferences stay in a compact overlay and work with the TV choice menus. */
+.sound-overlay{position:fixed;inset:0;z-index:20;background:#000b;display:flex;align-items:center;justify-content:center;padding:16px}
+.sound-card{background:var(--panel);color:var(--text);border:1px solid var(--border);border-radius:14px;padding:22px;width:min(540px,100%);max-height:90vh;overflow:auto}
+.sound-card h2{font-size:1.25rem;margin:0}.sound-card .dialog-heading{margin-bottom:12px}
+.sound-fields{display:grid;grid-template-columns:1.3fr 1fr;gap:16px}.sound-fields select,.sound-fields .tv-setting{margin-bottom:0}
+.sound-card p{font-size:.8rem;line-height:1.35}.sound-card>.muted{margin-bottom:0}
+@media(max-width:500px){.header-actions{flex-wrap:wrap;justify-content:flex-end}.sound-card{padding:16px}.sound-fields{gap:10px}}

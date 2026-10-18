@@ -46,7 +46,7 @@ export function initTV(doc, {storage, search = globalThis.location?.search || ''
  const visible = node => !!node && !node.disabled && !node.closest('[hidden]') && node.getClientRects().length > 0;
  function focus(node) { if (visible(node)) { node.focus(); node.scrollIntoView({block:'nearest', inline:'nearest'}); } }
  function controls() {
-  const scope = !panel.hidden ? panel : doc.querySelector('dialog[open]') || doc;
+  const scope = !panel.hidden ? panel : (!doc.getElementById('sound-dialog').hidden ? doc.getElementById('sound-dialog') : doc.querySelector('dialog[open]')) || doc;
   return [...scope.querySelectorAll('button,select,a[href]')].filter(visible);
  }
  function close() {
@@ -110,13 +110,14 @@ export function initTV(doc, {storage, search = globalThis.location?.search || ''
  doc.addEventListener('keydown', event => {
   if (!enabled || event.altKey || event.ctrlKey || event.metaKey) return;
   const key = remoteKey(event), arrow = ['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(key);
-  const dialog = doc.querySelector('dialog[open]');
+  const dialog = doc.querySelector('dialog[open]'),soundOpen=!doc.getElementById('sound-dialog').hidden;
   if (key === 'Escape') {
    if (!panel.hidden) { event.preventDefault(); event.stopPropagation(); close(); }
+   else if (soundOpen) { event.preventDefault(); event.stopPropagation(); doc.getElementById('close-sound').click(); }
    else if (dialog) { event.preventDefault(); event.stopPropagation(); dialog.close(); }
    return; // Never hijack the browser Back key outside a dialog.
   }
-  if (key === 'Tab' && (!panel.hidden || dialog)) {
+  if (key === 'Tab' && (!panel.hidden || dialog || soundOpen)) {
    const list = controls(), index = list.indexOf(doc.activeElement);
    event.preventDefault(); focus(list[(index + (event.shiftKey ? -1 : 1) + list.length) % list.length]); return;
   }
