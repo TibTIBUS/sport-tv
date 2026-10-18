@@ -1,14 +1,14 @@
-import {validate,plan} from './planner.mjs';
+import {validate,plan} from './planner.mjs?v=core-1';
 import {parseSettings} from './settings.mjs';
 import {initTheme} from './theme.mjs?v=themes-2';
-import {DemoPlayer,validateDemos,videoUrl,demoVideos} from './media.mjs?v=yt-premium-1';
+import {DemoPlayer,validateDemos,videoUrl,demoVideos} from './media.mjs?v=core-1';
 const $=id=>document.getElementById(id);let data,current,steps=[],index=0,remaining=0,deadline=0,running=false,active=false,elapsed=0,last=0,audio,started,completed=false;
 let themeStorage;try{themeStorage=localStorage;}catch{}
 initTheme(document.documentElement,$('theme-toggle'),document.querySelector('main'),themeStorage);
 let demos={},watching=false,demoExercise=null,demoSelection=0;
 const inlineDemo=new DemoPlayer($('demo-video'),$('demo-status'));
 const dialogDemo=new DemoPlayer($('dialog-video'),$('dialog-status'));
-function demoText(prefix,d){$(prefix+'-points').replaceChildren(...d.points.map(point=>{const li=document.createElement('li');li.textContent=point;return li;}));$(prefix+'-avoid').textContent=d.avoid;$(prefix+'-note').textContent=d.note;$(prefix+'-source').href=d.source;$(prefix+'-source').textContent=d.publisher;$(prefix+'-original').href=videoUrl(d);}
+function demoText(prefix,d){$(prefix+'-points').replaceChildren(...d.points.map(point=>{const li=document.createElement('li');li.textContent=point;return li;}));$(prefix+'-avoid').textContent=d.avoid;$(prefix+'-note').textContent=d.note;$(prefix+'-source').href=d.source;$(prefix+'-source').textContent=d.publisher;$(prefix+'-original').href=videoUrl(d);$(prefix+'-original').textContent=d.provider==='illustration'?'Ouvrir le schéma':'Vidéo originale';}
 function updateDemo(s){
  const resting=s.id==='rest';
  $('rest-panel').hidden=!resting;
@@ -41,7 +41,7 @@ for(const id of ['demo-original','demo-source'])$(id).onclick=()=>{if(running)$(
 const fmt=s=>`${Math.floor(s/60).toString().padStart(2,'0')}:${Math.ceil(s%60).toString().padStart(2,'0')}`;
 function beep(){try{if(!audio)return;const o=audio.createOscillator(),g=audio.createGain();o.connect(g);g.connect(audio.destination);g.gain.value=.08;o.frequency.value=660;o.start();o.stop(audio.currentTime+.15);}catch{}}
 function show(id){document.body.classList.toggle('home-active',id==='setup');document.body.classList.toggle('session-active',id==='player');for(const s of ['setup','player','finish'])$(s).hidden=s!==id;}
-function refresh(){try{current=plan(data,{day:Number($('day').value),minutes:Number($('duration').value),energy:$('energy').value,knee:$('knee').value,run:$('run').value});$('title').textContent=current.title;$('summary').textContent=current.steps.length?`${$('duration').value} minutes · Échauffement et pauses inclus · Deux haltères de 5 kg si adaptés`:'Jour de repos';$('notice').textContent=current.notice;$('start').disabled=!current.steps.length;$('preview').replaceChildren(...[...new Set(current.steps.filter(s=>s.phase==='Exercice').map(s=>s.name))].map(name=>{const li=document.createElement('li');li.textContent=name;return li;}));renderLibrary();}catch(e){$('error').textContent=e.message;$('start').disabled=true;}}
+function refresh(){try{current=plan(data,{day:Number($('day').value),minutes:Number($('duration').value),energy:$('energy').value,knee:$('knee').value,run:$('run').value});$('title').textContent=current.title;$('summary').textContent=current.steps.length?`${Math.round(current.steps.reduce((total,s)=>total+s.seconds,0)/60)} minutes${current.circuitRounds?' · 3 passages gainage + chaise':''} · Échauffement et pauses inclus · Deux haltères de 5 kg si adaptés`:current.notice.includes('25 minutes')?'Circuit complet · 25 ou 30 minutes':data.days[Number($('day').value)].rest?'Jour de repos':'Séance suspendue';$('notice').textContent=current.notice;$('start').disabled=!current.steps.length;$('preview').replaceChildren(...[...new Set(current.steps.filter(s=>s.phase==='Exercice').map(s=>s.name))].map(name=>{const li=document.createElement('li');const e=current.steps.find(s=>s.name===name&&s.phase==='Exercice');const count=current.steps.filter(s=>s.name===name&&s.phase==='Exercice').length;li.textContent=name+(e?.round?` · ${e.seconds} s × ${count}`:'');return li;}));renderLibrary();}catch(e){$('error').textContent=e.message;$('start').disabled=true;}}
 const phaseTitles={Préparation:'Prépare-toi',Exercice:'À toi de jouer',Récupération:'Repos',Échauffement:'Échauffe-toi', 'Retour au calme':'Ralentis doucement'};
 const encouragements=[
  'Allez Thibaut, une répétition après l’autre !',
@@ -62,14 +62,14 @@ function motivate(){
 }
 function render(){
  const s=steps[index],next=steps[index+1],preparing=s.phase==='Préparation';
- $('phase').textContent=`${s.phase} · Étape ${index+1} / ${steps.length}`;
+ $('phase').textContent=`${s.round?`Passage ${s.round} / ${s.rounds} · `:''}${s.phase} · Étape ${index+1} / ${steps.length}`;
  $('stage').dataset.phase=s.phase;
  $('stage-title').textContent=phaseTitles[s.phase]||s.phase;
- $('stage-help').textContent=preparing?'Ne commence pas encore les répétitions. Regarde le geste et place-toi ; le départ arrive à la fin du compte à rebours.':s.phase==='Exercice'?'Fais le mouvement maintenant, à ton rythme. Termine les répétitions indiquées, puis repose-toi si du temps reste.':s.phase==='Récupération'?'Relâche les muscles. Cette pause fait partie de la séance.':s.phase==='Échauffement'?'Commence à bouger doucement. Augmente le rythme progressivement.':'Marche lentement et laisse ta respiration ralentir.';
+ $('stage-help').textContent=preparing?'Ne commence pas encore les répétitions. Regarde le geste et place-toi ; le départ arrive à la fin du compte à rebours.':s.phase==='Exercice'&&s.mode==='hold'?'Tiens la position en respirant. Relâche si nécessaire, puis reprends quand tu es prêt.':s.phase==='Exercice'?'Fais le mouvement maintenant, à ton rythme. Termine les répétitions indiquées, puis repose-toi si du temps reste.':s.phase==='Récupération'?'Relâche les muscles. Cette pause fait partie de la séance.':s.phase==='Échauffement'?'Commence à bouger doucement. Augmente le rythme progressivement.':'Marche lentement et laisse ta respiration ralentir.';
  $('exercise').textContent=s.name;$('cue').textContent=s.cue;
  $('target').textContent=preparing?`À suivre : ${next?.seconds||0} secondes de mouvement · ${next?.target||'À ton rythme'}`:s.target||'À ton rythme';
  $('clock').setAttribute('aria-label',preparing?'Temps avant le départ':'Temps restant');$('clock-label').textContent=preparing?'Avant le départ':'Temps restant';updateClock();
- $('next').textContent=next?`Ensuite : ${phaseTitles[next.phase]||next.phase} · ${next.name} · ${next.seconds} s`:'Dernière étape';
+ $('next').textContent=next?`Ensuite : ${phaseTitles[next.phase]||next.phase} · ${next.name} · ${next.seconds} s${next.round?` · Passage ${next.round}/${next.rounds}`:''}`:'Dernière étape';
  $('progress').value=100*(index/steps.length);$('progress-label').textContent=Math.round(100*(index/steps.length))+' %';$('pause').textContent=running?'Pause':'Reprendre';updateDemo(s);motivate();
 }
 function updateClock(){
@@ -88,3 +88,4 @@ $('download').onclick=()=>{const report={version:1,started,session:current.title
 $('fullscreen').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen();}catch{$('error').textContent='Le plein écran n’est pas disponible dans ce navigateur.';}};
 document.addEventListener('keydown',e=>{if(!active||['SELECT','INPUT','BUTTON'].includes(document.activeElement.tagName))return;if(e.code==='Space'){e.preventDefault();$('pause').click();}if(e.code==='ArrowRight'){e.preventDefault();$('skip').click();}});
 try{const response=await fetch('./data/program.json',{cache:'no-store'});if(!response.ok)throw Error('Programme indisponible.');data=validate(await response.json());try{const dr=await fetch('./data/demos.json',{cache:'no-store'});if(!dr.ok)throw Error('Démonstrations indisponibles.');demos=validateDemos(await dr.json(),data.exercises);}catch{$('error').textContent='Les vidéos sont indisponibles. Les séances et les consignes restent accessibles.';}data.days.forEach((d,i)=>{const o=document.createElement('option');o.value=i;o.textContent=d.day;$('day').append(o);});$('day').value=(new Date().getDay()+6)%7;const {values,bad}=parseSettings(location.search,data.days.map(d=>d.day));if('day' in values)$('day').value=values.day;if('minutes' in values)$('duration').value=values.minutes;if('energy' in values)$('energy').value=values.energy;if('knee' in values)$('knee').value=values.knee;if('run' in values)$('run').value=values.run;for(const id of ['day','duration','energy','knee','run'])$(id).onchange=()=>{$('error').textContent='';$('applied').textContent='';refresh();};refresh();if(Object.keys(values).length)$('applied').textContent='Réglages reçus par l’adresse : '+['day','duration','energy','knee','run'].map(id=>$(id).selectedOptions[0].textContent).join(' · ');if(bad.length){$('error').textContent=`Réglage non reconnu dans l’adresse : ${bad.join(', ')}. Corrige-le ou choisis à la main.`;$('start').disabled=true;}}catch(e){$('error').textContent=`Impossible de charger les séances : ${e.message} Lance ce site avec un serveur HTTP.`;}
+

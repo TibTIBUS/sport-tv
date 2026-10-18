@@ -15,13 +15,14 @@ function sdk(provider){
  }).catch(e=>{delete apis[provider];throw e;});return apis[provider];
 }
 export const demoVideos=d=>[d,...(d.more||[])];
-export const videoUrl=d=>d.provider==='vimeo'?`https://vimeo.com/${d.videoId}`:`https://www.youtube.com/watch?v=${d.videoId}`;
+export const videoUrl=d=>d.provider==='illustration'?d.asset:d.provider==='vimeo'?`https://vimeo.com/${d.videoId}`:`https://www.youtube.com/watch?v=${d.videoId}`;
 export function validateDemos(demos,exercises){
  for(const [id,reference] of Object.entries(demos)){
   if(!exercises[id]||(reference.more&&!Array.isArray(reference.more)))throw Error('Démonstration invalide : '+id);
   for(const d of demoVideos(reference)){
    const provider=d.provider||'youtube';
-   if(!['youtube','vimeo'].includes(provider)||!(provider==='vimeo'?/^\d+$/:/^[-\w]{11}$/).test(d.videoId)||!d.publisher||!d.name||!Array.isArray(d.points)||d.points.length!==2||d.points.some(p=>typeof p!=='string'||!p)||!d.avoid||!d.note||(d!==reference&&d.more))throw Error('Démonstration invalide : '+id);
+   const validMedia=provider==='illustration'?/^assets\/[a-z_]+\.svg$/.test(d.asset):['youtube','vimeo'].includes(provider)&&(provider==='vimeo'?/^\d+$/:/^[-\w]{11}$/).test(d.videoId);
+   if(!validMedia||!d.publisher||!d.name||!Array.isArray(d.points)||d.points.length!==2||d.points.some(p=>typeof p!=='string'||!p)||!d.avoid||!d.note||(d!==reference&&d.more))throw Error('Démonstration invalide : '+id);
    if(new URL(d.source).protocol!=='https:')throw Error('Source non sécurisée.');
   }
  }return demos;
@@ -43,6 +44,11 @@ export class DemoPlayer{
  async load(d,playing=true){
   const key=videoUrl(d);if(this.key===key){this.playback(playing);return;}
   this.stop();const token=this.token;this.key=key;this.playing=playing;this.provider=d.provider||'youtube';this.status.textContent='Chargement de la démonstration…';
+  if(this.provider==='illustration'){
+   const img=document.createElement('img');img.src=d.asset;img.alt=d.name+' — '+d.points.join(' ');img.className='exercise-illustration';
+   img.onerror=()=>{if(token===this.token)this.status.textContent='Schéma indisponible. Les consignes restent accessibles.';};
+   this.container.append(img);this.status.textContent='Schéma du geste · Prends ton temps';return;
+  }
   const unavailable=()=>{if(token===this.token)this.status.textContent='Vidéo indisponible ici. Utilise le lien vers la vidéo originale ou les consignes.';};
   try{
    const API=await sdk(this.provider);if(token!==this.token)return;
@@ -62,3 +68,4 @@ export class DemoPlayer{
   }catch(e){if(token===this.token)this.status.textContent=e.message+' Les consignes restent disponibles.';}
  }
 }
+

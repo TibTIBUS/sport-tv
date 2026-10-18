@@ -6,7 +6,7 @@ Lecteur de séances du matin, en HTML/CSS/JavaScript, sans dépendance et sans c
 
 Depuis ce dossier : `python3 -m http.server 8080`. Ouvrir `http://localhost:8080` dans le navigateur. Ne pas ouvrir index.html directement : le programme est chargé par HTTP.
 
-Choisir un jour, 20/25/30 minutes, la forme, l'état du genou et une éventuelle course dans les dernières 24 heures. La durée inclut 4 minutes d'échauffement et 3 minutes de retour au calme. Chaque minute centrale contient préparation, effort et récupération. Les répétitions sont une cible facultative : arrêter le mouvement avant la fin du créneau si la technique se dégrade. Les haltères ne sont pas obligatoires sur chaque exercice.
+Choisir un jour, 20/25/30 minutes, la forme, l'état du genou et une éventuelle course dans les dernières 24 heures. La durée inclut 4 minutes d'échauffement et 3 minutes de retour au calme. Les étapes centrales contiennent préparation, effort et récupération. Les répétitions sont une cible facultative : arrêter le mouvement avant la fin du créneau si la technique se dégrade. Les haltères ne sont pas obligatoires sur chaque exercice.
 
 Commandes : pause/reprendre, passer, variante facile, arrêter, plein écran. Les sons sont activés au clic de démarrage si le navigateur le permet. Après une interruption de plus de 5 secondes, la lecture se met en pause plutôt que de sauter des exercices.
 
@@ -96,3 +96,24 @@ Sur écran tactile, un glissement horizontal sur le texte ou une zone libre du c
 ## Accueil compact
 
 Sur ordinateur ou télévision en paysage (au moins 900 × 600 pixels), l’accueil répartit les cinq réglages en haut, la séance et les démonstrations côte à côte, et les exercices dans un bandeau inférieur. La liste des exercices est directement visible. Les réglages et les identifiants des commandes utilisés par Hermès sont conservés. Les écrans étroits gardent un défilement vertical pour conserver la lisibilité.
+
+
+
+## Circuit gainage et chaise
+
+Les jours de renforcement (lundi, mercredi, vendredi), en forme bonne ou moyenne, sans gêne ni course signalée, intègrent trois passages du circuit : gainage face au sol sur les coudes 45 s, côté gauche 30 s, côté droit 30 s, gainage dynamique sur les coudes 45 s, chaise au mur 45 s. Chaque exercice est précédé de 10 s de préparation et suivi de 15 s de récupération. Les autres exercices occupent le temps restant, répartis entre les passages.
+
+Le circuit seul représente 9 min 45 s d’effort et 16 minutes avec préparation et repos. Avec les 7 minutes d’échauffement/retour au calme, il nécessite plus de 20 minutes : choisir 25 ou 30 minutes. Le mode 20 minutes bloque explicitement le démarrage de ce circuit et invite à choisir une durée suffisante ; aucune durée n’est allongée en silence. Les jours doux, repos, douleur et adaptations après course sont conservés, sans ajout automatique du circuit. Les réglages de bonne/moyenne forme ne raccourcissent pas les durées propres du circuit. Le bouton Plus facile, Pause et Passer restent disponibles.
+
+Les passages et le côté d’appui sont affichés pendant les exercices. Avant le départ, chaque mouvement du circuit affiche sa durée et ses trois répétitions. Les maintiens statiques disposent d’une consigne spécifique de maintien, plutôt que de répétitions.
+
+### Démonstrations ajoutées
+
+- Gainage sur les avant-bras : [Peak Physio](https://www.peak-physio.com.au/exercise/plank-forearms/), vidéo officielle liée par le cabinet, `o5QMoXuoZs4`.
+- Chaise : [Peak Physio](https://www.peak-physio.com.au/exercise/deep-wall-squat/), vidéo officielle liée par le cabinet, `ImNN11vubVU`. La profondeur du modèle ne constitue pas une cible obligatoire.
+- Gainage latéral : schémas SVG originaux, repères vérifiés avec [Holistic Physio Fitness](https://holisticphysiofitness.com.au/exercise/side-plank-isometric-hold/). La même posture est montrée avec le côté d’appui explicitement nommé ; pas de copie d’une photo du cabinet.
+- Gainage dynamique : schéma SVG original en deux étapes, appui sur les coudes et alternance des genoux. Repères : [Life Time — Experience Life, section Mountain Climber on Forearms](https://experiencelife.lifetime.life/article/break-it-down-the-mountain-climber/). Le genou avance sans exiger de contact avec la poitrine ; aucune vidéo bras tendus ou avec rotation ne remplace cette variante.
+
+Sources consultées le 18 octobre 2026. Les SVG sont des rappels simplifiés du geste, pas une validation individuelle de posture. Aucune image générée ni fichier vidéo tiers n’est réhébergé. Le lecteur conserve les paramètres de lecture intégrée, les liens de source et le fonctionnement YouTube Premium existants. La lecture réelle des nouveaux clips sur la télévision reste à vérifier.
+
+Vérification du lecteur : `node scripts/player-check.mjs` teste les commandes et les durées avec un DOM et des lecteurs vidéo simulés ; ce contrôle ne remplace pas la vérification visuelle sur télévision.
