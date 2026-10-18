@@ -1,3 +1,4 @@
+import {initAudio} from '../audio.mjs';
 import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
 import assert from 'node:assert/strict';
@@ -16,6 +17,7 @@ class Element{
  get selectedOptions(){return [{textContent:this.value}];}
 }
 for(const [,id] of html.matchAll(/id="([^"]+)"/g))nodes.set(id,new Element());
+nodes.get('sound-dialog').hidden=true;
 const selectors=new Map();
 const document={getElementById:id=>{assert(nodes.has(id),'Unknown element '+id);return nodes.get(id);},createElement:()=>new Element(),querySelector:s=>{if(!selectors.has(s))selectors.set(s,new Element());return selectors.get(s);},addEventListener(){},body:new Element(),documentElement:new Element(),activeElement:{tagName:'BODY'}};
 document.documentElement.ownerDocument=document;
@@ -23,7 +25,7 @@ const program=JSON.parse(readFileSync(new URL('../data/program.json',import.meta
 const demos=JSON.parse(readFileSync(new URL('../data/demos.json',import.meta.url),'utf8'));
 let interval,now=0;
 class QuietPlayer{stop(){} playback(){} load(d){this.reference=d;}}
-const context={initTV:()=>({enabled:false,focusView(){}}),document,validate,plan,sessions,sessionFromDay,parseSettings,initTheme,DemoPlayer:QuietPlayer,validateDemos,videoUrl,demoVideos,location:{search:'?jour=lundi&duree=25&forme=bonne&genou=ok&course=non'},localStorage:{getItem(){},setItem(){}},fetch:async url=>({ok:true,json:async()=>url.includes('program')?program:demos}),performance:{now:()=>now},setInterval:fn=>interval=fn,setTimeout(){},console,assert,URL,Blob,Date};
+const context={tickTime:()=>{now+=1000;interval();},initAudio,initTV:()=>({enabled:false,focusView(){}}),document,validate,plan,sessions,sessionFromDay,parseSettings,initTheme,DemoPlayer:QuietPlayer,validateDemos,videoUrl,demoVideos,location:{search:'?jour=lundi&duree=25&forme=bonne&genou=ok&course=non'},localStorage:{getItem(){},setItem(){}},fetch:async url=>({ok:true,json:async()=>url.includes('program')?program:demos}),performance:{now:()=>now},setInterval:fn=>interval=fn,setTimeout(){},console,assert,URL,Blob,Date};
 let source=readFileSync(new URL('../app.js',import.meta.url),'utf8').replace(/^import .*;\n/gm,'');
 source+=String.raw`
 $('intensity').value='normal';$('duration').value='25';$('energy').value='good';$('knee').value='ok';$('run').value='no';refresh();
@@ -31,8 +33,14 @@ assert.equal($('start').disabled,false);
 assert.match($('summary').textContent,/25 minutes.*3 passages/);
 assert.equal($('preview').children.filter(e=>e.textContent.includes('× 3')).length,5);
 $('start').click();assert.equal(steps[0].id,'warm');
+$('sound-toggle').click();assert.equal(running,false);assert.equal($('sound-dialog').hidden,false);
+$('sound-mode').value='beep';$('sound-volume').value='25';$('sound-mode').listeners.change();assert.equal(sounds.mode,'beep');assert.equal(sounds.volume,.25);
+$('close-sound').click();assert.equal(running,false);assert.equal($('sound-dialog').hidden,true);$('pause').click();
+
 $('skip').click();assert.equal(steps[index].id,'plank');
 assert.match($('phase').textContent,/Passage 1 \/ 3/);
+for(let n=0;n<7;n++){tickTime();}assert.equal(sounds.lastTick,'1:3');
+
 $('skip').click();assert.equal($('clock').textContent,'00:45');assert.match($('stage-help').textContent,/Tiens la position/);
 $('pause').click();assert.equal(running,false);const before=remaining;
 $('theme-toggle').click();assert.equal(document.documentElement.dataset.theme,'light');assert.equal(remaining,before);

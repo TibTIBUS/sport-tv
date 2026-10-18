@@ -1,12 +1,14 @@
+import {initAudio} from './audio.mjs?v=audio-1';
 import {validate,plan,sessions,sessionFromDay} from './planner.mjs?v=free-1';
-import {initTV} from './tv.mjs?v=tv-landscape-1';
+import {initTV} from './tv.mjs?v=audio-1';
 import {parseSettings} from './settings.mjs?v=free-1';
 import {initTheme} from './theme.mjs?v=tv-landscape-1';
 import {DemoPlayer,validateDemos,videoUrl,demoVideos} from './media.mjs?v=core-1';
-const $=id=>document.getElementById(id);let data,current,steps=[],index=0,remaining=0,deadline=0,running=false,active=false,elapsed=0,last=0,audio,started,completed=false;
+const $=id=>document.getElementById(id);let data,current,steps=[],index=0,remaining=0,deadline=0,running=false,active=false,elapsed=0,last=0,started,completed=false;
 let tv;
 let themeStorage;try{themeStorage=localStorage;}catch{}
 initTheme(document.documentElement,$('theme-toggle'),document.querySelector('main'),themeStorage);
+const sounds=initAudio(document,{storage:themeStorage,onOpen:()=>{if(active&&running)$('pause').click();}});
 let demos={},watching=false,demoExercise=null,demoSelection=0;
 const inlineDemo=new DemoPlayer($('demo-video'),$('demo-status'));
 const dialogDemo=new DemoPlayer($('dialog-video'),$('dialog-status'));
@@ -41,7 +43,6 @@ $('close-demo').onclick=()=>$('demo-dialog').close();$('demo-dialog').addEventLi
 $('watch').onclick=()=>{if(running)$('pause').click();watching=true;inlineDemo.playback(true);$('demo-status').textContent='Observe à ton rythme. Clique sur Reprendre quand tu es prêt.';};
 for(const id of ['demo-original','demo-source'])$(id).onclick=()=>{if(running)$('pause').click();};
 const fmt=s=>`${Math.floor(s/60).toString().padStart(2,'0')}:${Math.ceil(s%60).toString().padStart(2,'0')}`;
-function beep(){try{if(!audio)return;const o=audio.createOscillator(),g=audio.createGain();o.connect(g);g.connect(audio.destination);g.gain.value=.08;o.frequency.value=660;o.start();o.stop(audio.currentTime+.15);}catch{}}
 function show(id){document.body.classList.toggle('home-active',id==='setup');document.body.classList.toggle('session-active',id==='player');for(const s of ['setup','player','finish'])$(s).hidden=s!==id;tv?.focusView(id);}
 function refresh(){try{current=plan(data,{session:$('session').value,difficulty:$('intensity').value,minutes:Number($('duration').value),energy:$('energy').value,knee:$('knee').value,run:$('run').value});$('title').textContent=current.title;$('summary').textContent=current.steps.length?`${Math.round(current.steps.reduce((total,s)=>total+s.seconds,0)/60)} minutes${current.circuitRounds?' · 3 passages gainage + chaise':''} · Échauffement et pauses inclus · Deux haltères de 5 kg si adaptés`:current.notice.includes('25 minutes')?'Circuit complet · 25 ou 30 minutes':'Séance suspendue';$('notice').textContent=current.notice;$('start').disabled=!current.steps.length;$('preview').replaceChildren(...[...new Set(current.steps.filter(s=>s.phase==='Exercice').map(s=>s.name))].map(name=>{const li=document.createElement('li');const e=current.steps.find(s=>s.name===name&&s.phase==='Exercice');const count=current.steps.filter(s=>s.name===name&&s.phase==='Exercice').length;li.textContent=name+(e?.round?` · ${e.seconds} s × ${count}`:'');return li;}));renderLibrary();}catch(e){$('error').textContent=e.message;$('start').disabled=true;}}
 const phaseTitles={Préparation:'Prépare-toi',Exercice:'À toi de jouer',Récupération:'Repos',Échauffement:'Échauffe-toi', 'Retour au calme':'Ralentis doucement'};
@@ -78,13 +79,13 @@ function updateClock(){
  $('clock').textContent=fmt(Math.ceil(remaining));
  $('clock-face').style.setProperty('--remaining',Math.max(0,Math.min(1,remaining/steps[index].seconds))*360+'deg');
 }
-function finish(done){$('rest-panel').classList.add('is-paused');inlineDemo.stop();watching=false;running=false;active=false;completed=done;$('result').textContent=done?'Séance terminée.':'Séance arrêtée.';show('finish');}
-function advance(){watching=false;if(++index>=steps.length){finish(true);return;}remaining=steps[index].seconds;deadline=performance.now()+remaining*1000;last=performance.now();render();beep();}
-$('start').onclick=()=>{steps=current.steps.map(s=>({...s}));watching=false;index=0;remaining=steps[0].seconds;elapsed=0;started=new Date().toISOString();active=true;running=true;last=performance.now();deadline=last+remaining*1000;try{audio??=new AudioContext();audio.resume();}catch{}show('player');render();};
-$('pause').onclick=()=>{if(!active)return;watching=false;if(running){remaining=Math.max(0,(deadline-performance.now())/1000);running=false;}else{running=true;last=performance.now();deadline=last+remaining*1000;}render();};
+function finish(done){if(done)sounds.complete();else sounds.clear();$('rest-panel').classList.add('is-paused');inlineDemo.stop();watching=false;running=false;active=false;completed=done;$('result').textContent=done?'Séance terminée.':'Séance arrêtée.';show('finish');}
+function advance(){watching=false;if(++index>=steps.length){finish(true);return;}remaining=steps[index].seconds;deadline=performance.now()+remaining*1000;last=performance.now();render();if(running)sounds.step(steps[index]);else sounds.clear();}
+$('start').onclick=()=>{steps=current.steps.map(s=>({...s}));watching=false;index=0;remaining=steps[0].seconds;elapsed=0;started=new Date().toISOString();active=true;running=true;last=performance.now();deadline=last+remaining*1000;sounds.reset();sounds.unlock();show('player');render();sounds.step(steps[0]);};
+$('pause').onclick=()=>{if(!active)return;watching=false;if(running){sounds.clear();remaining=Math.max(0,(deadline-performance.now())/1000);running=false;}else{sounds.unlock();running=true;last=performance.now();deadline=last+remaining*1000;}render();};
 $('skip').onclick=()=>{if(active)advance();};$('stop').onclick=()=>{if(active)finish(false);};
 $('easy').onclick=()=>{for(let n=index;n<steps.length;n++)if(steps[n].phase==='Exercice'||steps[n].phase==='Préparation'){steps[n].easier=true;steps[n].cue=steps[n].easy;steps[n].target='Variante facile · À ton rythme';}render();};
-setInterval(()=>{if(!active||!running)return;const now=performance.now(),gap=now-last;if(gap>5000){remaining=Math.max(0,(deadline-last)/1000);running=false;render();$('next').textContent='Séance mise en pause après une interruption. Reprends quand tu es prêt.';return;}elapsed+=gap/1000;last=now;remaining=Math.max(0,(deadline-now)/1000);if(remaining<=0)advance();else {updateClock();motivate();}},100);
+setInterval(()=>{if(!active||!running)return;const now=performance.now(),gap=now-last;if(gap>5000){sounds.clear();remaining=Math.max(0,(deadline-last)/1000);running=false;render();$('next').textContent='Séance mise en pause après une interruption. Reprends quand tu es prêt.';return;}elapsed+=gap/1000;last=now;remaining=Math.max(0,(deadline-now)/1000);if(remaining<=0)advance();else {sounds.tick(index,remaining,steps[index+1]);updateClock();motivate();}},100);
 $('back').onclick=()=>{show('setup');refresh();};
 $('download').onclick=()=>{const report={version:1,started,session:current.title,requestedSession:$('session').value,difficultySetting:$('intensity').value,completed,activeSeconds:Math.round(elapsed),difficulty:$('difficulty').value,kneeDuring:$('feedback-knee').value,kneeNextMorning:null};const blob=new Blob([JSON.stringify(report,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=`bilan-${started.slice(0,10)}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
 $('fullscreen').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen();}catch{$('error').textContent='Le plein écran n’est pas disponible dans ce navigateur.';}};
@@ -93,3 +94,6 @@ try{const response=await fetch('./data/program.json',{cache:'no-store'});if(!res
 
 
 tv=initTV(document,{storage:themeStorage});
+
+document.addEventListener('visibilitychange',()=>{if(document.hidden){if(active&&running)$('pause').click();else sounds.clear();}});
+document.defaultView?.addEventListener('pagehide',()=>sounds.clear());

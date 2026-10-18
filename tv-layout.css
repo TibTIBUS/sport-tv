@@ -97,3 +97,13 @@
  :root.tv-mode #player .rest-panel p{font-size:10px}
  :root.tv-mode #player .actions button{padding:5px 7px}
 }
+@media(orientation:landscape){
+ :root.tv-mode .sound-card{padding:14px;width:min(480px,92vw);max-height:90vh}
+ :root.tv-mode .sound-card h2{font-size:18px}
+ :root.tv-mode .sound-card .dialog-heading{margin-bottom:8px}
+ :root.tv-mode .sound-fields{gap:12px}
+ :root.tv-mode .sound-fields label{font-size:13px}
+ :root.tv-mode .sound-fields .tv-setting{font-size:14px;min-height:30px;margin:5px 0 0;padding:6px 8px}
+ :root.tv-mode .sound-card button{font-size:13px;padding:6px 10px}
+ :root.tv-mode .sound-card p{font-size:12px;margin:10px 0}
+}
