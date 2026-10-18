@@ -1,4 +1,4 @@
-import {initAudio} from './audio.mjs?v=audio-1';
+import {initAudio} from './audio.mjs?v=coach-1';
 import {validate,plan,sessions,sessionFromDay} from './planner.mjs?v=free-1';
 import {initTV} from './tv.mjs?v=audio-1';
 import {parseSettings} from './settings.mjs?v=free-1';
