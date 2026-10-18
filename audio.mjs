@@ -1,3 +1,4 @@
+import {RecordedCoach} from './coach.mjs';
 const storageKey='sport-tv-audio-v1';
 const patterns={
  tick:[[0,660,.08]],prepare:[[0,620,.1]],go:[[0,880,.13],[.17,1100,.15]],
@@ -8,16 +9,19 @@ export class WorkoutAudio {
  constructor({storage,view=globalThis,onChange=()=>{}}={}){
   this.storage=storage;this.view=view;this.onChange=onChange;this.mode='voice';this.volume=.5;
   this.context=null;this.nodes=new Set();this.unlocked=false;this.lastTick='';this.round=0;this.voiceFailed=false;this.audioFailed=false;
+  this.coach=new RecordedCoach({view,onChange});this.coach.preload();
   try{const saved=JSON.parse(storage?.getItem(storageKey)||'null');if(saved&&['mute','beep','voice'].includes(saved.mode))this.mode=saved.mode;if(saved&&Number.isFinite(saved.volume)&&saved.volume>=0&&saved.volume<=1)this.volume=saved.volume;}catch{}
   try{view.speechSynthesis?.addEventListener?.('voiceschanged',()=>this.onChange());}catch{}
  }
  frenchVoice(){
   try{const voices=(this.view.speechSynthesis?.getVoices()||[]).filter(v=>/^fr(?:[-_]|$)/i.test(v.lang));return voices.find(v=>v.localService&&v.lang==='fr-FR')||voices.find(v=>v.localService)||voices[0];}catch{return null;}
  }
- get canSpeak(){return !this.voiceFailed&&!!this.view.SpeechSynthesisUtterance&&!!this.frenchVoice();}
+ get canSystemSpeak(){return !this.voiceFailed&&!!this.view.SpeechSynthesisUtterance&&!!this.frenchVoice();}
+ get canSpeak(){return this.coach.ready&&!this.audioFailed||this.canSystemSpeak;}
  get canBeep(){return !this.audioFailed&&!!(this.view.AudioContext||this.view.webkitAudioContext);}
  get status(){
   if(this.mode==='mute'||this.volume===0)return 'Son désactivé.';
+  if(this.mode==='voice'&&this.coach.supported&&!this.coach.failed&&!this.audioFailed)return this.coach.ready?'Voix coach ElevenLabs et bips activés.':'Chargement de la voix coach…';
   if(this.mode==='voice'&&this.canSpeak)return this.canBeep?'Bips et voix française activés.':'Voix française activée ; bips indisponibles ici.';
   if(!this.canBeep)return 'Le son n’est pas disponible dans ce navigateur.';
   return this.mode==='voice'?'Voix française indisponible ici : bips seuls.':'Bips activés.';
@@ -32,6 +36,7 @@ export class WorkoutAudio {
   this.unlocked=true;
   if(this.mode==='mute'||this.volume===0)return;
   this.voiceFailed=false;
+  this.coach.retry();this.coach.preload();
   const Context=this.view.AudioContext||this.view.webkitAudioContext;
   if(!Context){this.onChange();return;}
   this.audioFailed=false;
@@ -42,7 +47,7 @@ export class WorkoutAudio {
    this.onChange();
   }catch{this.audioFailed=true;this.onChange();}
  }
- clearSpeech(){try{this.view.speechSynthesis?.cancel();}catch{}}
+ clearSpeech(){this.coach.stop();try{this.view.speechSynthesis?.cancel();}catch{}}
  clear(){
   this.clearSpeech();
   for(const node of this.nodes){try{node.stop();}catch{}try{node.disconnect();}catch{}}
@@ -64,9 +69,15 @@ export class WorkoutAudio {
   }catch{this.audioFailed=true;this.onChange();}
  }
  say(text){
-  if(!this.unlocked||this.mode!=='voice'||this.volume===0||!this.canSpeak)return;
+  if(!this.unlocked||this.mode!=='voice'||this.volume===0)return;
+  this.clearSpeech();
+  const fallback=()=>{if(this.unlocked&&this.mode==='voice'&&this.volume>0)this.systemSay(text);};
+  if(!this.audioFailed&&this.coach.speak(text,{context:this.context,volume:this.volume,onFallback:fallback}))return;
+  fallback();
+ }
+ systemSay(text){
+  if(!this.canSystemSpeak)return;
   try{
-   this.clearSpeech();
    const utterance=new this.view.SpeechSynthesisUtterance(text);
    utterance.lang='fr-FR';utterance.voice=this.frenchVoice();utterance.rate=1;utterance.volume=this.volume;
    utterance.onerror=event=>{if(!['canceled','interrupted'].includes(event.error)){this.voiceFailed=true;this.onChange();}};
